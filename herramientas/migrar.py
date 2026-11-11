@@ -95,19 +95,86 @@ def trocear(slug):
         res.append((bloques[n], bloques[n + 1].strip()))
     return res
 
-def cabecera_html(slug, portada=False):
-    activo = ' class="activo"'
-    items = "".join(
-        f'<a href="{href}"{activo if s == slug else ""}>{nombre}</a>' for nombre, href, s in MENU)
-    marca = "" if portada else '<a class="yc-marca" href="/" aria-label="Inicio"><img src="/img/logo.png" alt="yo me confieso"></a>'
-    if portada:
-        marca = "<span></span>"
-    return f'<header class="yc-cabecera">{marca}<nav class="yc-menu">{items}</nav></header>'
+PASOS = [  # (número, nombre, slug base)
+    (0, "Introducción", "0-intro"),
+    (1, "Prepara", "1-prepara"),
+    (2, "Examen", "2-examen"),
+    (3, "Preguntas", "3-preguntas"),
+    (4, "Arrepentimiento", "4-dos-cosas"),
+    (5, "Ayudas", "5-ayudas"),
+    (6, "Paso a paso", "6-paso-a-paso"),
+    (7, "Final", "7-final"),
+]
+
+TITULOS = {  # título, subtítulo
+    "0-intro": ("El sacramento de la misericordia", "¿Sabes qué es?"),
+    "0-dudas": ("Algunas dudas sobre la confesión", ""),
+    "1-prepara": ("Prepara tu confesión", ""),
+    "2-examen": ("Examen de conciencia", "Para adultos"),
+    "2-examen-jovenes": ("Examen de conciencia", "Para jóvenes"),
+    "2-examen-primaria": ("Examen de conciencia", "Para chicos y chicas"),
+    "3-preguntas": ("Algunas preguntas preparadas para ti", ""),
+    "3-preguntas-jovenes": ("Algunas preguntas para jóvenes como tú", ""),
+    "3-preguntas-primaria": ("Algunas preguntas para chicos y chicas como tú", ""),
+    "4-dos-cosas": ("Dos cosas antes de confesarte", ""),
+    "5-ayudas": ("Algunas ayudas antes de confesarte", ""),
+    "6-paso-a-paso": ("La confesión paso a paso", ""),
+    "7-final": ("Terminando…", ""),
+    "contacto": ("¿Quieres decirme algo?", ""),
+}
+
+ICONO_FLECHA = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'
+
+def variante(slug):
+    for v in ("-jovenes", "-primaria"):
+        if slug.endswith(v):
+            return v
+    return ""
+
+def paso_de(slug):
+    for n, nombre, base in PASOS:
+        if slug == base or slug.startswith(base + "-"):
+            return n, nombre
+    return None, None
+
+def href_paso(base, slug):
+    v = variante(slug)
+    if base in ("2-examen", "3-preguntas") and v:
+        return f"/{base}{v}/"
+    return f"/{base}/"
+
+def camino_html(slug):
+    actual, _ = paso_de(slug)
+    items = []
+    for n, nombre, base in PASOS:
+        clase = ' class="activo" aria-current="page"' if n == actual else ""
+        items.append(f'<a href="{href_paso(base, slug)}"{clase}><span>{n}</span>{nombre}</a>')
+    return "".join(items)
+
+MENU_ENLACES = [("Inicio", "/"), ("Dudas", "/0-dudas/"), ("Contacto", "/contacto/")]
+
+def menu_html(slug):
+    activo = {"inicio": "/", "0-dudas": "/0-dudas/", "contacto": "/contacto/"}.get(slug)
+    return "".join(
+        f'<a href="{h}"{" aria-current=\"page\"" if h == activo else ""}>{n}</a>'.replace('\\"', '"')
+        for n, h in MENU_ENLACES)
+
+def cabecera_pagina(slug):
+    n, nombre = paso_de(slug)
+    if n is not None:
+        barras = "".join(f'<span{" class=\"hecho\"" if i <= n else ""}></span>'.replace('\\"', '"') for i in range(8))
+        etiqueta = f'Paso {n} · {nombre}'
+        progreso = f'<div class="yc-progreso" aria-label="Paso {n} de 7"><div class="yc-barras">{barras}</div><span class="yc-etiqueta">{etiqueta}</span></div>'
+    else:
+        progreso = f'<div class="yc-progreso"><span class="yc-etiqueta">{"Dudas frecuentes" if slug == "0-dudas" else "Contacto"}</span></div>'
+    titulo, sub = TITULOS[slug]
+    sub_html = f'<p class="yc-sub">{sub}</p>' if sub else ""
+    return f'<header class="yc-titular">{progreso}<h1>{titulo}</h1>{sub_html}</header>'
 
 def documento(slug, cuerpo, portada=False):
     titulo, desc, _ = PAGINAS[slug]
     canon = "https://www.yomeconfieso.es/" + ("" if slug == "inicio" else slug + "/")
-    return f"""<!DOCTYPE html>
+    cabeza = f"""<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -119,22 +186,65 @@ def documento(slug, cuerpo, portada=False):
 <meta property="og:description" content="{desc}">
 <meta property="og:image" content="https://www.yomeconfieso.es/img/abrazo.jpg">
 <meta property="og:locale" content="es_ES">
+<meta name="theme-color" content="#2A2238">
 <link rel="icon" href="/favicon.png">
 <link rel="apple-touch-icon" href="/img/icono-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/estilo.css">
 </head>
-<body class="yc{' portada' if portada else ''}">
-{cabecera_html(slug, portada)}
-<main class="yc-principal">
+"""
+    if portada:
+        return cabeza + f"""<body class="yc yc-inicio">
 {cuerpo}
-</main>
-<footer class="yc-pie">yomeconfieso.es · <a href="/0-dudas/">Dudas</a> · <a href="/contacto/">Contacto</a></footer>
 </body>
 </html>
 """
+    return cabeza + f"""<body class="yc">
+<aside class="yc-cuadro">
+  <a class="yc-marca" href="/" aria-label="Inicio"><img src="/img/logo.png" alt="Yo me confieso"></a>
+  <nav class="yc-camino" aria-label="Tu camino"><p>Tu camino</p>{camino_html(slug)}</nav>
+</aside>
+<div class="yc-cuerpo">
+  <header class="yc-barra">
+    <details class="yc-menu-movil">
+      <summary aria-label="Abrir menú"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></summary>
+      <nav aria-label="Menú">{menu_html(slug)}<hr>{camino_html(slug)}</nav>
+    </details>
+    <nav class="yc-menu" aria-label="Menú">{menu_html(slug)}</nav>
+  </header>
+  <main class="yc-principal">
+{cabecera_pagina(slug)}
+{cuerpo}
+  </main>
+  <footer class="yc-pie">Esta web te ayuda a prepararte. El perdón lo da el sacerdote en la confesión. · <a href="/0-dudas/">Dudas</a> · <a href="/contacto/">Contacto</a></footer>
+</div>
+</body>
+</html>
+"""
+
+PORTADA = """<div class="yc-portada">
+  <div class="yc-portada-cuadro">
+    <nav class="yc-menu yc-menu-claro" aria-label="Menú"><a href="/0-intro/">Qué es la confesión</a><a href="/0-dudas/">Dudas</a><a href="/contacto/">Contacto</a></nav>
+    <h1><img src="/img/logo.png" alt="Yo me confieso"></h1>
+    <p class="yc-cita">«Es un encuentro vivo de amor y sanación que manifiesta de manera palpable la ternura infinita del Corazón de Jesús.»</p>
+  </div>
+  <main class="yc-portada-texto">
+    <nav class="yc-menu yc-menu-portada" aria-label="Menú"><a href="/0-intro/">Qué es la confesión</a><a href="/0-dudas/">Dudas</a><a href="/contacto/">Contacto</a></nav>
+    <p class="yc-antetitulo">Examen de conciencia y confesión</p>
+    <p class="yc-lema">Tu guía paso a paso para el examen de conciencia y la confesión</p>
+    <p class="yc-entradilla">Sin prisas, a tu ritmo. Un examen sencillo, unas preguntas para ti y el diálogo con el sacerdote en la palma de la mano.</p>
+    <p class="yc-antetitulo yc-elige">Elige tu examen</p>
+    <div class="yc-examenes">
+      <a class="yc-examen principal" href="/2-examen/"><span><strong>Adultos</strong><small>Más de 30 años</small></span>FLECHA</a>
+      <a class="yc-examen" href="/2-examen-jovenes/"><span><strong>Jóvenes</strong><small>De 15 a 30 años</small></span>FLECHA</a>
+      <a class="yc-examen" href="/2-examen-primaria/"><span><strong>Chicos y chicas</strong><small>De 10 a 15 años</small></span>FLECHA</a>
+    </div>
+    <a class="yc-enlace" href="/0-intro/">¿Qué es la confesión? Empieza por aquí</a>
+    <p class="yc-nota">Esta web te ayuda a prepararte. El perdón lo da el sacerdote en la confesión.</p>
+  </main>
+</div>""".replace("FLECHA", ICONO_FLECHA)
 
 # ---------- arreglos concretos por página ----------
 def arreglos(slug, codigo):
@@ -218,15 +328,8 @@ def construir(slug):
             codigo = urls(arreglos(slug, limpiar_codigo(contenido)))
     partes = []
     if slug == "inicio":
-        partes.append('<section class="yc-hero"><h1><img src="/img/logo.png" alt="Yo me confieso"></h1>'
-                      '<p class="yc-lema">Tu guía paso a paso para el examen de conciencia y la confesión</p></section>')
-    if titulares:
-        h = titulares[0]
-        h = re.sub(r"^<h[12][^>]*>|</h[12]>$", "", h)
-        sub = ""
-        if len(titulares) > 1:
-            sub = '<p class="yc-sub">' + re.sub(r"</?h[12][^>]*>", "", titulares[1]) + "</p>"
-        partes.append(f'<header class="yc-titular"><h1>{h}</h1>{sub}</header>')
+        codigo = ""  # la portada nueva no usa los fragmentos antiguos
+        partes.append(PORTADA)
     for t in textos_antes:
         clase = "yc-texto yc-aviso" if "NO SUSTITUYE" in t else "yc-texto"
         partes.append(f'<div class="{clase}">{urls(t)}</div>')
@@ -235,10 +338,15 @@ def construir(slug):
     for t in textos_despues:
         partes.append(f'<div class="yc-texto">{urls(t)}</div>')
     if slug == "5-ayudas":
-        partes.append('<a class="yc-boton" href="/6-paso-a-paso/">Estoy preparado</a>')
+        partes.append('<a class="yc-boton" href="/6-paso-a-paso/">Estoy preparado ' + ICONO_FLECHA + '</a>')
     if slug == "0-dudas":
-        partes.append('<a class="yc-boton" href="/">Volver al inicio</a>')
+        partes.append('<a class="yc-boton secundario" href="/">Volver al inicio</a>')
     html = documento(slug, "\n".join(partes), portada=(slug == "inicio"))
+    if slug.startswith("2-examen"):
+        for viejo, nuevo in [("#c0392b", "#9E3B52"), ("#e67e22", "#C7843A"), ("#27ae60", "#5E8F6E"),
+                             ("ctx.fillStyle   = '#ecf0f1'", "ctx.fillStyle   = '#ECE8F3'"),
+                             ("ctx.fillStyle    = '#2c3e50'", "ctx.fillStyle    = '#2A2238'")]:
+            html = html.replace(viejo, nuevo)
     for mal, bien in [("te confesaros", "te confesaste"), ("cercansa", "cercanas"), ("pero pero", "pero"), ("momento en vayas", "momento en que vayas")]:
         html = html.replace(mal, bien)
     # rutas relativas: funcionan igual en el dominio propio y en la vista previa de github.io
