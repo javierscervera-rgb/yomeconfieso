@@ -410,7 +410,7 @@ body.yc .pagina .story p {
   margin: 18px auto;
 }
 body.yc .pagina .story p.dedos { text-align: center; }
-body.yc .pagina .buttons { text-align: left; margin: 30px auto 50px; padding: 0 24px; }
+body.yc .pagina > .buttons { text-align: left; margin: 30px auto 50px; padding: 0 24px; }
 body.yc .pagina .btn {
   width: 100%;
   max-width: 420px;
