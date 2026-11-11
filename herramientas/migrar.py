@@ -183,9 +183,9 @@ def arreglos(slug, codigo):
 .pagina .chat-body { min-height: 60vh; }
 </style>""", 1)
     if slug == "inicio":
-        codigo = codigo.replace("display: none; /* Oculto por defecto (escritorio) */", "display: flex;")
-        codigo = codigo.replace("""grid-template-columns: repeat(2, 1fr);
-            grid-template-rows: repeat(3, auto);""", "grid-template-columns: repeat(2, 1fr);")
+        codigo = re.sub(r"display: none;\s*/\* Oculto por defecto \(escritorio\) \*/", "display: flex;", codigo)
+        codigo = re.sub(r"grid-template-rows: repeat\(3, auto\);", "", codigo)
+        assert "Oculto por defecto" not in codigo
         codigo = codigo.replace("</style>", """
 @media (min-width: 768px) { .pagina .contenedor { grid-template-columns: repeat(3, 1fr); } }
 .pagina .contenedor { margin: 0 auto; }
