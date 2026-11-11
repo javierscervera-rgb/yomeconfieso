@@ -10,15 +10,15 @@
 <meta property="og:description" content="Preguntas del examen de conciencia para jóvenes.">
 <meta property="og:image" content="https://www.yomeconfieso.es/img/abrazo.jpg">
 <meta property="og:locale" content="es_ES">
-<link rel="icon" href="/favicon.png">
-<link rel="apple-touch-icon" href="/img/icono-180.png">
+<link rel="icon" href="../favicon.png">
+<link rel="apple-touch-icon" href="../img/icono-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/estilo.css">
+<link rel="stylesheet" href="../css/estilo.css">
 </head>
 <body class="yc">
-<header class="yc-cabecera"><a class="yc-marca" href="/" aria-label="Inicio"><img src="/img/logo.png" alt="yo me confieso"></a><nav class="yc-menu"><a href="/">Inicio</a><a href="/0-dudas/">Dudas</a><a href="/contacto/">Contacto</a></nav></header>
+<header class="yc-cabecera"><a class="yc-marca" href="../" aria-label="Inicio"><img src="../img/logo.png" alt="yo me confieso"></a><nav class="yc-menu"><a href="../">Inicio</a><a href="../0-dudas/">Dudas</a><a href="../contacto/">Contacto</a></nav></header>
 <main class="yc-principal">
 <header class="yc-titular"><h1>ALGUNAS PREGUNTAS preparadas para jóvenes como tú</h1></header>
 <div class="yc-texto"><p>Vamos con las preguntas sobre la lista 📋 que has ordenado antes.&nbsp;</p><p>En cada pregunta piensa, desde la última vez que te has confesado, si has cometido ese pecado “Muchas veces”, “Algunas veces”, “Pocas veces” o “Nunca”. Cada vez que selecciones la frecuencia de una pregunta saldrá la siguiente y así hasta completar todas.</p><p>Al finalizar verás un botón para continuar con tu preparación.</p></div>
@@ -449,7 +449,7 @@ function guardarRespuestasBackend() {
         const unidad = document.getElementById("tiempoUnidad").value;
         localStorage.setItem("tiempoSinConfesarse", `${numero} ${unidad}`);
 
-        window.location.href = "/4-dos-cosas/";
+        window.location.href = "../4-dos-cosas/";
     };
     chat.appendChild(btn);
 
@@ -487,6 +487,6 @@ function guardarRespuestasBackend() {
 </script>
 </div>
 </main>
-<footer class="yc-pie">yomeconfieso.es · <a href="/0-dudas/">Dudas</a> · <a href="/contacto/">Contacto</a></footer>
+<footer class="yc-pie">yomeconfieso.es · <a href="../0-dudas/">Dudas</a> · <a href="../contacto/">Contacto</a></footer>
 </body>
 </html>
