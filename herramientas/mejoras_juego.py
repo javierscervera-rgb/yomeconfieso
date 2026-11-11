@@ -121,7 +121,7 @@ def mejorar(ruta):
     s = cambiar(s, """            scrollCont.addEventListener('wheel', e => {""", """            window.addEventListener('keydown', e => {
                 if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
                     // la flecha mueve las cajas en su dirección
-                    scrollCont.scrollBy({ left: e.key === 'ArrowRight' ? -60 : 60, behavior: 'smooth' });
+                    scrollCont.scrollLeft += e.key === 'ArrowRight' ? -45 : 45;
                     e.preventDefault();
                 } else if (e.key === 'ArrowDown') {
                     acelerarPalabra();
