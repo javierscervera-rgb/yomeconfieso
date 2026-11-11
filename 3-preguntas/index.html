@@ -26,14 +26,15 @@
 <style>
 .pagina #chat {
     padding: 10px;
-    height: 75vh;
-    overflow-x: hidden;
-    overflow-y: auto;
+    padding-bottom: 45vh; /* espacio para poder centrar la última pregunta */
     display: flex;
     flex-direction: column;
     align-items: flex-start;
 }
 .pagina #progress-container {
+    position: sticky;
+    bottom: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.15);
     width: 95%;
     margin: 0 auto 20px auto;
     background: #ccc;
@@ -160,6 +161,10 @@
 </div>
 
 <script>
+function centrar(el) {
+    el.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
 let preguntas = [];
 let index = 0;
 let respuestasUsuario = {};
@@ -265,7 +270,7 @@ function mostrarPregunta(texto) {
     msg.appendChild(text);
     msg.appendChild(btns);
     chat.appendChild(msg);
-    chat.scrollTop = chat.scrollHeight;
+    centrar(msg);
 }
 
 function actualizarProgreso() {
@@ -370,7 +375,9 @@ function guardarRespuestasBackend() {
     };
     chat.appendChild(copyBtn);
 
-    chat.scrollTop = chat.scrollHeight;
+    chat.style.paddingBottom = "20px";
+    document.getElementById("progress-container").style.display = "none";
+    msg.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 </script>
 </div>
