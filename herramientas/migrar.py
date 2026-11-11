@@ -5,6 +5,8 @@ Después de ejecutarlo, las páginas generadas son la fuente que se edita."""
 import re, os, sys
 
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+import hashlib
+VERSION_CSS = hashlib.md5(open(os.path.join(RAIZ, "css", "estilo.css"), "rb").read()).hexdigest()[:8]
 ORIG = os.path.join(RAIZ, "original")
 
 PAGINAS = {
@@ -192,7 +194,7 @@ def documento(slug, cuerpo, portada=False):
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/estilo.css">
+<link rel="stylesheet" href="/css/estilo.css?v={VERSION_CSS}">
 </head>
 """
     if portada:

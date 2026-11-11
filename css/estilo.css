@@ -269,7 +269,7 @@ body.yc :focus-visible { outline: 3px solid var(--ciruela); outline-offset: 2px;
 }
 .yc-portada-cuadro > * { position: relative; z-index: 2; }
 .yc-menu-claro { display: flex; align-self: flex-end; margin: 12px 8px 0; flex-wrap: wrap; justify-content: flex-end; }
-.yc-menu-claro a { color: #fff; font-size: 14px; padding: 10px; text-shadow: 0 1px 3px rgba(0,0,0,.4); }
+.yc-portada .yc-menu-claro a { color: #fff; font-size: 14px; padding: 10px; text-shadow: 0 1px 3px rgba(0,0,0,.4); }
 .yc-menu-claro a:first-child { display: none; }
 .yc-menu-claro a:hover { background: rgba(255,255,255,.18); }
 .yc-portada-cuadro h1 { margin: 6px 0 0; line-height: 0; }
