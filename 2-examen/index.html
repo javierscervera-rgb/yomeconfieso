@@ -38,7 +38,7 @@
             max-width: 90%;
         }
 .pagina .start-subtitle {
-            font-size: 1rem;
+            font-size: 1.1rem;
             color: #34495e;
             margin-bottom: 50px;
             line-height: 1.2;
@@ -208,6 +208,7 @@ Si te equivocas puedes recargar la página y volver a empezar<br><br>
                 mainContent.style.display = 'block';
                 
                 // Iniciamos el canvas y la animación
+                document.querySelector('.main-container').scrollIntoView({ block: 'center' });
                 initApp();
             }, 600);
         });

@@ -171,6 +171,9 @@ def arreglos(slug, codigo):
             }, { passive: false });
         }""", 1)
         assert "arrastre" in codigo, slug
+        # al empezar, colocar el juego a pantalla completa (si no, las cajas quedan por debajo)
+        codigo = codigo.replace("initApp();", "document.querySelector('.main-container').scrollIntoView({ block: 'center' });\n                initApp();", 1)
+        codigo = codigo.replace(".pagina .start-subtitle {\n            font-size: 1rem;", ".pagina .start-subtitle {\n            font-size: 1.1rem;")
     if slug.startswith("3-preguntas"):
         codigo = codigo.replace("te confesaros", "te confesaste")
     if slug == "6-paso-a-paso":
