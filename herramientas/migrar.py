@@ -239,7 +239,8 @@ def construir(slug):
     if slug == "0-dudas":
         partes.append('<a class="yc-boton" href="/">Volver al inicio</a>')
     html = documento(slug, "\n".join(partes), portada=(slug == "inicio"))
-    html = html.replace("te confesaros", "te confesaste")
+    for mal, bien in [("te confesaros", "te confesaste"), ("cercansa", "cercanas"), ("pero pero", "pero"), ("momento en vayas", "momento en que vayas")]:
+        html = html.replace(mal, bien)
     # rutas relativas: funcionan igual en el dominio propio y en la vista previa de github.io
     pre = "./" if slug == "inicio" else "../"
     html = re.sub(r'((?:href|src|data-url)=|location\.href\s*=\s*)(["\'])/(?!/)', lambda m: m.group(1) + m.group(2) + pre, html)
