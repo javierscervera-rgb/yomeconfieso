@@ -30,7 +30,7 @@ MENU = [("Inicio", "/", "inicio"), ("Dudas", "/0-dudas/", "0-dudas"), ("Contacto
 
 # ---------- CSS: prefijar todos los selectores con .pagina ----------
 def prefijar_css(css):
-    css = re.sub(r"@import[^;]+;", "", css)
+    css = re.sub(r"@import\s+url\([^)]*\)[^;]*;", "", css)
     out, i = [], 0
     while i < len(css):
         j = css.find("{", i)
