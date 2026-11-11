@@ -71,7 +71,7 @@ body.yc :focus-visible { outline: 3px solid var(--ciruela); outline-offset: 2px;
   width: 44px;
   height: 44px;
   border-radius: 22px;
-  background: rgba(255,255,255,.22);
+  background: rgba(42,34,56,.55);
   color: #fff;
   display: flex;
   align-items: center;
@@ -118,9 +118,9 @@ body.yc :focus-visible { outline: 3px solid var(--ciruela); outline-offset: 2px;
 /* ===== Contenido ===== */
 .yc-principal { position: relative; margin-top: -60px; padding: 0 0 24px; }
 .yc-titular { max-width: var(--ancho-texto); margin: 0 auto; padding: 0 24px 6px; }
-.yc-progreso { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.yc-progreso { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; white-space: nowrap; }
 .yc-barras { display: flex; gap: 4px; }
-.yc-barras span { width: 18px; height: 4px; border-radius: 2px; background: #D3CCE0; }
+.yc-barras span { width: 12px; height: 4px; border-radius: 2px; background: #D3CCE0; }
 .yc-barras span.hecho { background: var(--tinta); }
 .yc-etiqueta {
   font-size: 12px;
