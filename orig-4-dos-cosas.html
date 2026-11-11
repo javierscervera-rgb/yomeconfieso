@@ -1,0 +1,121 @@
+<!-- 4-dos-cosas -->
+
+<!-- ===== HEADING ===== -->
+<div><h1>dos cosas antes de confesarte</h1></div>
+
+<!-- ===== CODE ===== -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DOS COSAS</title>
+
+<style>
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  margin:0;
+  background:#0f172a;
+  color:#000;
+  scroll-behavior:smooth;
+}
+
+.story{
+  max-width:700px;
+  margin:0 auto;
+  padding:20px 0 10px 0;
+}
+
+.story p{
+  max-width:680px;
+  margin:28px auto;
+  padding:0 14px;
+  text-align:center;
+  font-size:1.25rem;
+  line-height:1.6;
+  opacity:0;
+  transform:translateY(40px);
+  transition:opacity 1.2s ease, transform 1.2s ease;
+}
+
+.story p:first-child{ margin-top:10px; }
+.story p.visible{ opacity:1; transform:translateY(0); }
+
+/* BOTONES */
+.buttons{
+  text-align:center;
+  color:White;
+  margin:50px auto 80px auto;
+  opacity:0;
+  transition:opacity .8s ease-in;
+}
+.buttons.visible{ opacity:1; }
+
+.btn{
+  display:block;
+  width:80%;
+  max-width:420px;
+  margin:18px auto;
+  background-color: rgb(89,193,192);
+  text-decoration:none;
+  padding:14px 28px;
+  font-size:16px;
+  font-weight:600;
+  text-transform:uppercase;
+  border-radius:6px;
+  cursor:pointer;
+  transition:all .3s ease;
+}
+
+/* FIX: asegurar color negro en todos los estados del enlace */
+.btn:link,
+.btn:visited,
+.btn:hover,
+.btn:active{
+  color:#000;
+}
+
+.btn:hover{
+  transform:translateY(-1px);
+  box-shadow:0 4px 12px rgba(0,0,0,0.2);
+}
+
+.btn:active{
+  transform:translateY(0);
+  box-shadow:0 2px 6px rgba(0,0,0,0.2);
+}
+</style>
+
+<div class="story">
+<p>¿Cómo te has quedado después de contestar todas las preguntas? El examen de conciencia puede ser un poco durillo...</p>
+<p>Lo cierto es que el pecado en sí mismo es una realidad dura. Decir que NO a Dios y comenzar un camino de autodestrucción y dolor para los tuyos.</p>
+<p>Por eso merece la pena detenernos un momento a considerar, con dolor, lo que hemos hecho.</p>
+<p>Piénsalo durante unos segundos, ¿quieres?</p>
+<p>Asegúrate, antes de continuar, que estás verdaderamente arrepentido y que pondrás los medios necesarios para que no se repita.</p>
+<p>¿Ya?</p>
+<p>Pues ahora puedes continuar.</p>
+</div>
+
+<div class="buttons" id="buttons">
+  <a class="btn" href="https://n2005905.websitebuilder.online/5-ayudas">
+    AYUDAS ANTES DE LA CONFESIÓN
+  </a>
+
+  <a class="btn" href="https://n2005905.websitebuilder.online/6-paso-a-paso">
+    ESTOY PREPARADO
+  </a>
+</div>
+
+<script>
+const paragraphs=document.querySelectorAll('.story p');
+const buttons=document.getElementById('buttons');
+
+const observer=new IntersectionObserver(entries=>{
+ entries.forEach(entry=>{
+  if(entry.isIntersecting){
+   entry.target.classList.add("visible");
+   if(entry.target===paragraphs[paragraphs.length-1])
+     setTimeout(()=>buttons.classList.add('visible'),800);
+  }
+ });
+},{threshold:0,rootMargin:"-67% 0px -10% 0px"});
+
+paragraphs.forEach(p=>observer.observe(p));
+</script>

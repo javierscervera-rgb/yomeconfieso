@@ -1,0 +1,498 @@
+<!-- 3-preguntas-primaria -->
+
+<!-- ===== HEADING ===== -->
+<div><h1><span class="" style="font-family:CormorantGaramond;">ALGUNAS PREGUNTAS preparadas para chicos/as COMO TÚ</span></h1></div>
+
+<!-- ===== TEXT ===== -->
+<div><p><span class="desktop-font-size-20">Vamos con las preguntas sobre la lista 📋 que has ordenado antes.&nbsp;</span></p><p><span class="desktop-font-size-20">En cada pregunta piensa, desde la última vez que te has confesado, si has cometido ese pecado “Muchas veces”, “Algunas veces”, “Pocas veces” o “Nunca”. Cada vez que selecciones la frecuencia de una pregunta saldrá la siguiente y así hasta completar todas.</span></p><p><span class="desktop-font-size-20">Al finalizar verás un botón para continuar con tu preparación.</span></p></div>
+
+<!-- ===== CODE ===== -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chat de preguntas</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    font-size: 1rem;
+    margin: 0;
+    background: #e5ddd5;
+}
+
+#chat {
+    padding: 10px;
+    height: 75vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+#progress-container {
+    width: 95%;
+    margin: 0 auto 20px auto;
+    background: #ccc;
+    height: 20px;
+    border-radius: 10px;
+    overflow: hidden;
+    display: none;
+}
+
+#progress-bar {
+    width: 0%;
+    height: 100%;
+    background: rgb(89, 193, 192);
+    transition: width 0.3s;
+}
+
+.message {
+    padding: 10px 15px;
+    margin: 5px 0;
+    border-radius: 20px;
+    max-width: 95%;
+    display: flex;
+    flex-direction: column;
+    animation: fadeIn 0.5s;
+    font-size: 1.25rem;
+}
+
+.bot {
+    background: #dcf8c6;
+    border-top-left-radius: 5px;
+    margin-right: auto;
+}
+
+.buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+button {
+    padding: 6px 10px;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    background: rgba(0,0,0,0.08);
+    transition: background 0.2s;
+    font-size: 1rem;
+}
+
+button.selected {
+    background: rgb(89, 193, 192);
+    color: white;
+}
+
+.start {
+    margin: 10px auto;
+    padding: 12px 18px;
+    font-size: 1.5rem;
+    border-radius: 12px;
+    background: rgb(89, 193, 192);
+    color: White;
+    border: none;
+    cursor: pointer;
+    display: block;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.start:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.final-btn {
+    margin: 15px;
+    padding: 14px 20px;
+    font-size: 1.1rem;
+    border-radius: 12px;
+    background: rgb(89, 193, 192);
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    width: calc(100% - 30px);
+    box-sizing: border-box;
+}
+
+.copy-btn {
+    margin: 0 15px 15px 15px;
+    padding: 14px 20px;
+    font-size: 1.1rem;
+    border-radius: 12px;
+    background: rgb(89, 193, 192);
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    width: calc(100% - 30px);
+    box-sizing: border-box;
+}
+
+.extra-texto-container {
+    padding: 10px 15px;
+    margin: 5px 0 0 0;
+    background: #dcf8c6;
+    border-radius: 20px;
+    border-top-left-radius: 5px;
+    max-width: 95%;
+    font-size: 1.25rem;
+}
+
+.extra-texto-container label {
+    display: block;
+    margin-bottom: 8px;
+}
+
+.extra-texto-container textarea {
+    width: 100%;
+    min-height: 100px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    padding: 8px;
+    font-size: 1rem;
+    font-family: Arial, sans-serif;
+    resize: vertical;
+    box-sizing: border-box;
+    background: #fff;
+}
+</style>
+
+<button class="start" onclick="iniciarChat()">INICIAR CHAT</button>
+
+<div id="chat"></div>
+
+<div id="progress-container">
+    <div id="progress-bar"></div>
+</div>
+
+<script>
+let preguntas = [];
+let index = 0;
+let respuestasUsuario = {};
+
+const preguntasMap = {
+"NO REZO": {
+  0: [],
+  1: ["A veces no rezo."],
+  2: ["No rezo con atención todos los días, ni al levantarme ni al acostarme.", "No visito a Jesús en la Iglesia o el oratorio."],
+  3: ["No rezo nada en todo el día", "No le agradezco a Dios al comenzar el día ni al terminar", "No visito a Jesús en la Iglesia o el oratorio"]
+},
+
+"BLASFEMIA": {
+  0: [],
+  1: ["He dicho insultos con cosas de Dios."],
+  2: ["He dicho palabras que ofenden a Dios o a la Virgen Santísima.", "He jurado por Dios."],
+  3: ["He dicho palabras que ofenden a Dios o a la Virgen Santísima.", "Me he burlado de las cosas de Dios o de la Iglesia", "He jurado por Dios."]
+},
+
+"SIN MISA": {
+  0: [],
+  1: ["He dejado de ir a Misa por pereza, aunque podía hacerlo."],
+  2: ["He dejado de ir a Misa por pereza, aunque podía hacerlo.", "He preferido callarme o mentir a los mayores para no tener que ir a Misa."],
+  3: ["He dejado de ir a Misa por pereza, aunque podía hacerlo.", "He estado distraído o jugando en Misa", "He preferido callarme o mentir a los mayores para no tener que ir a Misa."]
+},
+
+"DESOBEDIENCIA": {
+  0: [],
+  1: ["No obedezco a mis padres/profesores, etc."],
+  2: ["No obedezco a mis padres en todo lo que me mandan.", "Obedezco a mis padres pero quejándome, tarde y con mala cara."],
+  3: ["No obedezco a mis padres en lo que me mandan.", "Obedezco a mis padres pero quejándome, tarde y con mala cara.", "No obedezco o lo hago mal a mis profesores, cuidadores, hermanos mayores…"]
+},
+
+"NO RESPETAR": {
+  0: [],
+  1: ["Falto al respeto con algunas personas"],
+  2: ["No trato con respeto a los profesores.", "No trato con respeto a algunas personas mayores."],
+  3: ["No trato con respeto a los profesores.", "No trato con respeto a algunas personas mayores.", "Me burlo de profesores o de otros mayores."]
+},
+
+"HABLAR MAL": {
+  0: [],
+  1: ["He hablado mal de otras personas."],
+  2: ["He insultado o hablado mal de otras personas."],
+  3: ["He hablado mal de otras personas.", "He insultado a compañeros o amigos.", "He dicho cosas falsas de otras personas."]
+},
+
+"PELEAS": {
+  0: [],
+  1: ["Me he peleado con hermanos o amigos."],
+  2: ["Me he peleado con mis hermanos.", "Me he peleado con mis amigos o compañeros."],
+  3: ["Me he peleado con mis hermanos.", "Me he peleado con mis amigos o compañeros.", "He hecho rabiar a hermanos, amigos o compañeros."]
+},
+
+"BURLAS": {
+  0: [],
+  1: ["Me he reído de otras personas."],
+  2: ["Me he reído de los defectos de otros.", "Deseaba que a otros les pasen cosas malas."],
+  3: ["Me he reído de los defectos de otros.", "He hecho burla de hermanos, amigos o compañeros.", "Deseaba que a otros les pasen cosas malas."]
+},
+
+"ENFADOS": {
+  0: [],
+  1: ["Me enfado con frecuencia."],
+  2: ["Me enfado con frecuencia.", "Cuando me enfado grito y digo palabrotas."],
+  3: ["Me enfado con frecuencia.", "Cuando me enfado grito y digo palabrotas.", "He roto cosas y he sido violento cuando me enfadaba."]
+},
+
+"NO PERDONO": {
+  0: [],
+  1: ["No pido perdón a quien he hecho daño."],
+  2: ["No pido perdón a quien he hecho daño.", "No hago pronto las paces."],
+  3: ["No pido perdón a quien he hecho daño.", "No perdono enseguida a quien me disgusta, aunque el Señor me perdona a mí.", "No quiero hacer las paces cuando me enfado"]
+},
+
+"ORGULLOSO/A": {
+  0: [],
+  1: ["Me enfado cuando me dicen las cosas"],
+  2: ["No reconozco mis defectos y me enfado cuando me los dicen.", "Me creo que soy perfecto y no dejo que me corrijan."],
+  3: ["No reconozco mis defectos y me enfado cuando me los dicen.", "Me creo que soy perfecto y no dejo que me corrijan.", "Digo \"y tú más\" cuando me dicen algo."]
+},
+
+"QUEJAS": {
+  0: [],
+  1: ["Me quejo mucho"],
+  2: ["Me quejo muchas veces.", "Siempre estoy en plan: Estoy cansado, no me gusta, tengo frío, etc"],
+  3: ["Me quejo muchas veces.", "Siempre estoy en plan: Estoy cansado, no me gusta, tengo frío, etc", "Me olvido de cómo están los demás y solo pienso en mí mismo."]
+},
+
+"IMPUREZA": {
+  0: [],
+  1: ["He visto, hablado o hecho cosas impuras"],
+  2: ["He visto, hablado o hecho cosas impuras", "He tenido curiosidad y he mirado o escuchado cosas contra la pureza."],
+  3: ["He visto o he hecho cosas impuras", "He tenido conversaciones impuras que ofenden a Dios.", "He estado pensando pensamientos que van contra la pureza."]
+},
+
+"PEREZA": {
+  0: [],
+  1: ["Soy perezoso en las cosas que no me apetece"],
+  2: ["Dejo sin hacer las cosas que no me apetecen por pereza.", "Hago mal las cosas que no me gustan."],
+  3: ["Me distraigo en clase y no presto atención.", "No hago las tareas cuando debo y me dejo llevar por la pereza.", "He sido perezoso al levantarme o al cumplir mis obligaciones."]
+},
+
+"EGOÍSTA": {
+  0: [],
+  1: ["He sido egoísta cuando tenía que dejar mis cosas o estar con otros."],
+  2: ["He sido egoísta cuando tenía que dejar mis cosas.", "No estoy con los que no me caen bien aunque estén solos o lo estén pasando mal"],
+  3: ["He sido egoísta cuando tenía que dejar mis cosas.", "No estoy con los que no me caen bien aunque estén solos o lo estén pasando mal", "Siempre quiero quedar por encima de los demás."]
+},
+
+"ME LO QUEDO": {
+  0: [],
+  1: ["He cogido cosas que no son mías"],
+  2: ["He cogido cosas que no son mías.", "No devuelvo enseguida las cosas que encuentro y no son mías."],
+  3: ["He cogido cosas que no son mías.", "He cogido dinero en casa que no era mío.", "No devuelvo enseguida las cosas que encuentro y no son mías."]
+},
+
+"CAPRICHOSO": {
+  0: [],
+  1: ["Siempre quiero tener más"],
+  2: ["Deseo tener cosas inútiles por puro capricho.", "Me enfado cuando no me dan lo que pido."],
+  3: ["Deseo tener cosas inútiles por puro capricho.", "Gasto demasiado de mi dinero o del dinero de mis padres/abuelos solo en caprichos.", "Me enfado cuando no me dan lo que pido."]
+},
+
+"MENTIROSO": {
+  0: [],
+  1: ["He engañado o he dicho mentiras"],
+  2: ["He engañado o he dicho mentiras", "He mentido para quedar bien o para evitar una corrección."],
+  3: ["No digo la verdad y tengo miedo de reconocer mis defectos.", "He mentido para quedar bien o para evitar una corrección.", "Hago trampas en los juegos."]
+},
+
+"ENVIDIOSO": {
+  0: [],
+  1: ["Siento envidia y no hago nada para solucionarlo"],
+  2: ["Cuando siento envidia dejo que me ponga triste y no hago nada.", "Me da tristeza que otros tengan cosas que yo no tengo y me enfado."],
+  3: ["Cuando siento envidia dejo que me ponga triste y no hago nada.", "Me da tristeza que otros tengan cosas que yo no tengo y me enfado.", "A veces siento que no me quieren como a los demás pero no lo digo."]
+},
+
+"CABEZOTA": {
+  0: [],
+  1: ["Quiero llevar la razón y soy cabezota"],
+  2: ["Intento quedar por encima de los demás y llevar siempre la razón.", "Insisto con cabezonería cuando las cosas no son como a mi me gustaría."],
+  3: ["Intento quedar por encima de los demás.", "Quiero llevar siempre la razón y estoy insistiendo hasta que me dan la razón.", "Insisto con cabezonería cuando las cosas no son como a mi me gustaría."]
+}
+};
+
+function iniciarChat() {
+    document.querySelector(".start").style.display = "none";
+    document.getElementById("progress-container").style.display = "block";
+
+    const raw = localStorage.getItem("resultados");
+    if (!raw) return alert("Primero completa el examen.");
+
+    const data = JSON.parse(raw);
+    generarPreguntas(data);
+    lanzarPreguntas();
+    actualizarProgreso();
+}
+
+function generarPreguntas(data) {
+    preguntas = [];
+    index = 0;
+    respuestasUsuario = {};
+
+    data.forEach(item => {
+        const palabra = item.word;
+        const valor = item.value;
+
+        if (preguntasMap[palabra] && preguntasMap[palabra][valor]) {
+            preguntas.push(...preguntasMap[palabra][valor]);
+        }
+    });
+}
+
+function lanzarPreguntas() {
+    if (index >= preguntas.length) {
+        guardarRespuestasBackend();
+        return;
+    }
+    mostrarPregunta(preguntas[index]);
+}
+
+function mostrarPregunta(texto) {
+    const chat = document.getElementById("chat");
+
+    const msg = document.createElement("div");
+    msg.className = "message bot";
+
+    const text = document.createElement("div");
+    text.textContent = texto;
+
+    const btns = document.createElement("div");
+    btns.className = "buttons";
+
+    ["Muchas veces.","Algunas veces.","Pocas veces.", "Nunca."].forEach(val => {
+        const b = document.createElement("button");
+        b.textContent = val;
+
+        b.onclick = () => {
+            respuestasUsuario[texto] = val;
+
+            btns.querySelectorAll("button").forEach(btn => btn.classList.remove("selected"));
+            b.classList.add("selected");
+
+            btns.querySelectorAll("button").forEach(btn => btn.disabled = true);
+
+            index++;
+            actualizarProgreso();
+            lanzarPreguntas();
+        };
+
+        btns.appendChild(b);
+    });
+
+    msg.appendChild(text);
+    msg.appendChild(btns);
+    chat.appendChild(msg);
+    chat.scrollTop = chat.scrollHeight;
+}
+
+function actualizarProgreso() {
+    const progress = document.getElementById("progress-bar");
+    const porcentaje = ((index) / preguntas.length) * 100;
+    progress.style.width = porcentaje + "%";
+}
+
+function guardarRespuestasBackend() {
+    let textoFinal = "";
+
+    Object.entries(respuestasUsuario).forEach(([pregunta, valor]) => {
+        if (valor !== "Nunca.") {
+            textoFinal += "• " + valor + " " + pregunta + "\n";
+        }
+    });
+
+    localStorage.setItem("respuestasUsuario", textoFinal.trim());
+
+    const chat = document.getElementById("chat");
+
+    const msg = document.createElement("div");
+    msg.className = "message bot";
+    msg.innerHTML = `
+        <strong>¡Respuestas guardadas correctamente!</strong><br><br>
+        Ya puedes continuar.
+    `;
+    chat.appendChild(msg);
+
+    const extraContainer = document.createElement("div");
+    extraContainer.className = "extra-texto-container";
+
+    const label = document.createElement("label");
+    label.textContent = "¿Quieres añadir algo más a tu examen?";
+
+    const textarea = document.createElement("textarea");
+    textarea.id = "textoAdicional";
+
+    extraContainer.appendChild(label);
+    extraContainer.appendChild(textarea);
+    chat.appendChild(extraContainer);
+
+    const confesionContainer = document.createElement("div");
+    confesionContainer.className = "extra-texto-container";
+    confesionContainer.innerHTML = `
+        <label>Una última cosa: ¿hace cuánto que no te confiesas?</label>
+        <div style="display:flex; gap:10px; align-items:center; margin-top:8px;">
+            <select id="tiempoNumero" style="padding:8px; border-radius:8px; border:1px solid #ccc; font-size:1rem;">
+                ${Array.from({length:40}, (_,i) => `<option value="${i+1}">${i+1}</option>`).join('')}
+            </select>
+            <select id="tiempoUnidad" style="padding:8px; border-radius:8px; border:1px solid #ccc; font-size:1rem;">
+                <option value="días">días</option>
+                <option value="semanas">semanas</option>
+                <option value="meses">meses</option>
+                <option value="años" selected>años</option>
+            </select>
+        </div>
+    `;
+    chat.appendChild(confesionContainer);
+
+    const btn = document.createElement("button");
+    btn.className = "final-btn";
+    btn.textContent = "VOY A CONFESARME";
+    btn.onclick = () => {
+        const textoExtra = document.getElementById("textoAdicional").value.trim();
+        localStorage.setItem("textoAdicional", textoExtra);
+
+        const numero = document.getElementById("tiempoNumero").value;
+        const unidad = document.getElementById("tiempoUnidad").value;
+        localStorage.setItem("tiempoSinConfesarse", `${numero} ${unidad}`);
+
+        window.location.href = "https://n2005905.websitebuilder.online/4-dos-cosas";
+    };
+    chat.appendChild(btn);
+
+    const copyBtn = document.createElement("button");
+    copyBtn.className = "copy-btn";
+    copyBtn.textContent = "Copiar respuestas en el portapapeles";
+    copyBtn.onclick = () => {
+        const respuestas = localStorage.getItem("respuestasUsuario") || "";
+        if (!respuestas) {
+            alert("No hay respuestas guardadas para copiar.");
+            return;
+        }
+        navigator.clipboard.writeText(respuestas).then(() => {
+            copyBtn.textContent = "¡Copiado!";
+            setTimeout(() => {
+                copyBtn.textContent = "Copiar respuestas en el portapapeles";
+            }, 2000);
+        }).catch(() => {
+            const el = document.createElement("textarea");
+            el.value = respuestas;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand("copy");
+            document.body.removeChild(el);
+            copyBtn.textContent = "¡Copiado!";
+            setTimeout(() => {
+                copyBtn.textContent = "Copiar respuestas en el portapapeles";
+            }, 2000);
+        });
+    };
+    chat.appendChild(copyBtn);
+
+    chat.scrollTop = chat.scrollHeight;
+}
+</script>
+
+<!-- ===== TEXT ===== -->
+<div><p>.</p></div>

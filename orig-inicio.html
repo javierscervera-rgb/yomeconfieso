@@ -1,0 +1,297 @@
+<!-- inicio -->
+
+<!-- ===== IMG ===== -->
+<img src="/wp-content/uploads/go-x/u/e14fc132-4d4c-43ec-8075-3acce69eb76c/l0,t0,w509,h564/image.png">
+
+<!-- ===== CODE ===== -->
+
+
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Web</title>
+    <style>
+        /* Fondo oscuro detrás del mensaje */
+        #aviso-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); /* Más oscuro para mejor contraste */
+            z-index: 9998;
+        }
+
+        /* Caja del mensaje */
+        #aviso-dispositivo {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgb(255, 255, 255);     /* ← Fondo 100% opaco */
+            color: black;
+            border: 2px solid #333;
+            border-radius: 15px;
+            padding: 25px 35px;
+            max-width: 90%;
+            width: 500px;
+            text-align: center;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+            z-index: 9999;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        /* Mostrar en tablet y escritorio */
+        @media (min-width: 769px) {
+            #aviso-overlay,
+            #aviso-dispositivo {
+                display: block;
+            }
+        }
+    </style>
+
+
+
+    <!-- Fondo oscuro -->
+    <div id="aviso-overlay"></div>
+
+    <!-- Mensaje -->
+    <div id="aviso-dispositivo">
+        <strong>Esta web está optimizada para su uso desde un teléfono móvil.</strong><br><br>
+        Estamos trabajando para que se vea bien en ordenador y tablet.<br>
+        Hasta entonces, te pedimos que entres desde tu teléfono móvil.
+        <br><br>
+        Disculpa las molestias.
+    </div>
+
+
+
+
+<!-- ===== CODE ===== -->
+<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuatro Botones</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            background: #f4f7f9;           /* Fondo sin márgenes blancos */
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;   /* Empieza desde arriba */
+            padding: 0;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        /* Botón circular + ahora en la parte SUPERIOR del contenedor */
+        .boton-flotante {
+            position: relative;            /* Cambiado a relativo para que siga el flujo */
+            margin: 25px auto 20px auto;   /* Espaciado superior e inferior */
+            width: clamp(58px, 14vw, 80px);
+            height: clamp(58px, 14vw, 80px);
+            background: rgb(89, 193, 192);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: clamp(2rem, 7.5vw, 3rem);
+            display: none;                 /* Oculto por defecto (escritorio) */
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.4s ease;
+            align-self: center;
+        }
+
+        /* Mostrar SOLO en móviles */
+        @media (max-width: 767px) {
+            .boton-flotante {
+                display: flex;
+            }
+        }
+
+        .boton-flotante:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .boton-flotante.oculto {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transform: scale(0.5);
+        }
+
+        /* Contenedor de botones */
+        .contenedor {
+            width: 100%;
+            max-width: 960px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(3, auto);
+            gap: clamp(14px, 3vw, 24px);
+            padding: 0 15px 30px 15px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .contenedor.mostrar {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Botones */
+        .boton {
+            min-height: clamp(130px, 22vh, 180px);
+            border: none;
+            border-radius: 12px;
+            background: rgb(89, 193, 192);
+            color: white;
+            font-size: clamp(1rem, 3.8vw, 1.2rem);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: clamp(12px, 2.5vw, 18px);
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .boton:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .titulo {
+            font-size: clamp(1.2rem, 4.5vw, 1.55rem);
+            margin-bottom: 10px;
+            font-weight: 700;
+            line-height: 1.1;
+        }
+
+        .explicacion {
+            font-size: clamp(0.9rem, 3vw, 1.05rem);
+            line-height: 1.4;
+            display: none;
+        }
+
+        .boton.activo {
+            background: white;
+            color: #222;
+        }
+
+        .boton.activo .titulo {
+            display: none;
+        }
+
+        .boton.activo .explicacion {
+            display: block;
+        }
+
+        @media (max-width: 520px) {
+            .contenedor {
+                gap: 12px;
+                padding: 0 10px 25px 10px;
+            }
+            .boton {
+                min-height: 115px;
+            }
+        }
+    </style>
+
+
+
+    <!-- Botón circular + (ahora arriba del contenedor) -->
+    <button class="boton-flotante" id="btnMas">+</button>
+
+    <!-- Contenedor de botones -->
+    <div class="contenedor" id="contenedorBotones">
+        <button class="boton" data-url="https://www.yomeconfieso.es/0-intro/">
+            <div class="titulo">PARA PROFUNDIZAR</div>
+            <div class="explicacion">Saber más sobre la confesión</div>
+        </button>
+
+        <button class="boton" data-url="https://yomeconfieso.es/0-dudas/">
+            <div class="titulo">DUDAS</div>
+            <div class="explicacion">Dudas frecuentes que nos escribís por mail.</div>
+        </button>
+
+        <button class="boton" data-url="https://www.yomeconfieso.es/2-examen/">
+            <div class="titulo">EXAMEN ADULTOS</div>
+            <div class="explicacion">Ayuda para mayores de 30 años</div>
+        </button>
+
+        <button class="boton" data-url="https://www.yomeconfieso.es/2-examen-jovenes/">
+            <div class="titulo">EXAMEN JÓVENES</div>
+            <div class="explicacion">Ayuda para jóvenes entre 15 y 30 años</div>
+        </button>
+
+        <button class="boton" data-url="https://www.yomeconfieso.es/2-examen-primaria/">
+            <div class="titulo">EXAMEN CHICOS/AS</div>
+            <div class="explicacion">Ayuda para chicos/as entre 10 y 15 años</div>
+        </button>
+
+        <button class="boton" data-url="https://www.yomeconfieso.es/contacto/">
+            <div class="titulo">CONTACTO</div>
+            <div class="explicacion">Cuéntanos tus experiencias con la confesión</div>
+        </button>
+    </div>
+
+    <script>
+        const btnMas = document.getElementById('btnMas');
+        const contenedor = document.getElementById('contenedorBotones');
+        const botones = document.querySelectorAll('.boton');
+        let botonActivo = null;
+
+        btnMas.addEventListener('click', () => {
+            contenedor.classList.add('mostrar');
+            setTimeout(() => {
+                contenedor.scrollIntoView({ behavior: "smooth", block: "start" });
+            }, 100);
+            btnMas.classList.add('oculto');
+        });
+
+        botones.forEach(boton => {
+            boton.addEventListener('click', () => {
+                if (botonActivo && botonActivo !== boton) {
+                    botonActivo.classList.remove('activo');
+                }
+
+                if (boton === botonActivo) {
+                    const url = boton.getAttribute('data-url');
+                    if (url && url !== '#') window.location.href = url;
+                } else {
+                    boton.classList.add('activo');
+                    botonActivo = boton;
+                }
+            });
+        });
+    </script>

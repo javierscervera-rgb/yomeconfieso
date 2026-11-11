@@ -1,0 +1,119 @@
+<!-- contacto -->
+
+<!-- ===== HEADING ===== -->
+<div><h2 style="text-align:center">¿QUIERES&nbsp;<br>DECIRME ALGO?</h2></div>
+
+<!-- ===== TEXT ===== -->
+<div><p><span class="desktop-font-size-20">Si tienes cualquier duda o quieres hacerme un comentario o sugerencia sobre la confesión o sobre esta web puedes rellenar este formulario de contacto, estaré encantado de leerte.</span></p></div>
+
+<!-- ===== CODE ===== -->
+
+
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contacto</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f7fa;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;                 /* Eliminado el padding que causaba márgenes blancos */
+    }
+    .form-container {
+      background: white;
+      padding: 30px 25px;         /* Aumentado un poco el padding interno */
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      width: 95%;
+      margin: 10px auto;               /* Margen mínimo para que no toque los bordes en móviles pequeños */
+    }
+    h2 {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: border 0.3s;
+    }
+    input:focus, textarea:focus {
+      border-color: #007BFF;
+      outline: none;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: rgb(89, 193, 192);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .success-message {
+      display: none;
+      text-align: center;
+      font-size: 16px;
+      color: #2e7d32;
+    }
+  </style>
+
+
+  <div class="form-container">
+    <form id="formulario" action="https://formsubmit.co/info@yomeconfieso.es" method="POST">
+      <h2>Contacto</h2>
+      <input type="text" name="nombre" placeholder="Tu nombre" required="">
+      <input type="text" name="contacto" placeholder="Correo electrónico" required="">
+      <textarea name="mensaje" rows="4" placeholder="Escribe aquí lo que quieras" required=""></textarea>
+      <input type="hidden" name="_subject" value="yomeconfieso.es">
+      <input type="hidden" name="_captcha" value="false">
+      <button type="submit">Enviar</button>
+    </form>
+
+    <div class="success-message" id="mensajeExito">
+      Tu mensaje ha sido enviado. Muchas gracias, ¡estamos en contacto!
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('formulario');
+    const mensaje = document.getElementById('mensajeExito');
+    
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      fetch(form.action, {
+        method: "POST",
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      }).then(response => {
+        if (response.ok) {
+          form.style.display = "none";
+          mensaje.style.display = "block";
+        } else {
+          alert("Hubo un problema al enviar el mensaje.");
+        }
+      }).catch(() => {
+        alert("Error de conexión.");
+      });
+    });
+  </script>
+
+
+<!-- ===== TEXT ===== -->
+<div><p>.</p></div>

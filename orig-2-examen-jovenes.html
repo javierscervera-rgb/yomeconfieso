@@ -1,0 +1,462 @@
+<!-- 2-examen-jovenes -->
+
+<!-- ===== HEADING ===== -->
+<div><h2 style="text-align:center">EXAMEN DE&nbsp;<br>CONCIENCIA<br>PARA JÓVENES</h2></div>
+
+<!-- ===== CODE ===== -->
+
+
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Gráfico Deslizable</title>
+    <style>
+        html, body {
+            margin: 0; 
+            padding: 0; 
+            height: 100%;
+            overflow-x: hidden;
+            overflow-y: auto;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        /* ==================== BOTÓN DE INICIO ==================== */
+        #startScreen {
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.6s ease;
+        }
+
+        .start-content {
+            text-align: center;
+            max-width: 90%;
+        }
+        .start-subtitle {
+            font-size: 1rem;
+            color: #34495e;
+            margin-bottom: 50px;
+            line-height: 1.2;
+        }
+        #startBtn {
+            padding: 25px 60px;
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            background: rgb(89,193,192);
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        #startBtn:hover {
+            background: white;
+            color: #27ae60;
+            transform: scale(1.08);
+        }
+
+        /* ==================== CONTENIDO ORIGINAL ==================== */
+        .main-content {
+            display: none;
+            height: 100%;
+        }
+
+        .main-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 90vh;
+            padding: 2px 2px;
+            box-sizing: border-box;
+        }
+
+        #fallingCanvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 20;
+        }
+
+        .scroll-container {
+            width: 100%;
+            max-width: 1200px;
+            height: calc(100vh - 200px);
+            max-height: 800px;
+            overflow-x: auto;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            background: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            scrollbar-width: thin;
+            scrollbar-color: #27ae60 #f1f1f1;
+            position: relative;
+            z-index: 5;
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+        .scroll-container::-webkit-scrollbar { height: 10px; }
+        .scroll-container::-webkit-scrollbar-thumb { background: #27ae60; border-radius: 10px; }
+
+        .graph-wrapper {
+            width: 900px;
+            min-width: 900px;
+            height: 100%;
+            position: relative;
+        }
+
+        #mainSvg {
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 100%; height: 160px;
+            display: block;
+            z-index: 3;
+        }
+
+        #stackedWords {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 4;
+        }
+
+        text { font-family: Arial, Helvetica, sans-serif; font-weight: bold; }
+
+        #continueBtn {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 18px 42px;
+            font-size: 22px;
+            font-weight: bold;
+            color: white;
+            background: rgb(89,193,192);
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 20px 30px rgb(0,0,0.2);
+            cursor: pointer;
+            z-index: 100;
+            display: none;
+            transition: all 0.3s;
+        }
+        #continueBtn:hover {
+            background: rgb(89,193,192);
+            transform: translate(-50%, -50%) scale(1.05);
+        }
+    </style>
+
+
+
+    <!-- Pantalla de inicio -->
+    <div id="startScreen">
+        <div class="start-content">
+            <p class="start-subtitle">
+Vamos a hacer un juego antes de continuar.<br><br>
+Desde la parte de arriba del cuadro van a ir cayendo algunas palabras, desliza los cuadros de colores que tienes en el inferior de la pantalla para colocar las palabras en el cuadro de “Mucho”, “Regular”, “Poco” o para eliminar la palabra si es “Nada”.<br><br> 
+No pienses mucho, no te compliques, solo coloca las palabras que luego te haré las preguntas para prepararte a la Confesión, ¿vale?. <br><br>
+Pulsa en el botón de “INICIAR CHAT”  cuando hayas terminado.<br><br>
+Si te equivocas puedes recargar la página y volver a empezar.<br>
+Pulsa el botón de aquí 👇🏻 abajo para comenzar: <br><br>
+            </p>
+            <button id="startBtn">INICIAR EXAMEN</button>
+        </div>
+    </div>
+
+    <!-- Todo el contenido original -->
+    <div class="main-content">
+
+        <canvas id="fallingCanvas"></canvas>
+
+        <div class="main-container">
+            <div class="scroll-container" id="scrollContainer">
+                <div class="graph-wrapper" id="graphWrapper">
+
+                    <svg id="mainSvg" viewBox="0 0 900 140" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+                        <rect x="20" y="60" width="190" height="60" rx="8" fill="#c0392b"></rect>
+                        <text x="115" y="90" fill="white" font-size="20" text-anchor="middle" dominant-baseline="middle">MUCHO 😔</text>
+                        <rect x="235" y="60" width="190" height="60" rx="8" fill="#e67e22"></rect>
+                        <text x="330" y="90" fill="white" font-size="20" text-anchor="middle" dominant-baseline="middle">REGULAR 🙄</text>
+                        <rect x="450" y="60" width="190" height="60" rx="8" fill="#27ae60"></rect>
+                        <text x="545" y="90" fill="white" font-size="20" text-anchor="middle" dominant-baseline="middle">POCO 😅</text>
+                        <rect x="665" y="60" width="215" height="60" rx="8" fill="#ecf0f1" stroke="#2c3e50" stroke-width="2"></rect>
+                        <text x="772" y="90" fill="#2c3e50" font-size="20" font-weight="bold" text-anchor="middle" dominant-baseline="middle">¡Nada! 😎</text>
+                    </svg>
+
+                    <div id="stackedWords"></div>
+                </div>
+            </div>
+        </div>
+
+        <button id="continueBtn">INICIAR CHAT</button>
+    </div>
+
+    <script>
+        // ==================== LÓGICA DE INICIO ====================
+        const startScreen = document.getElementById('startScreen');
+        const mainContent  = document.querySelector('.main-content');
+        const startBtn     = document.getElementById('startBtn');
+
+        startBtn.addEventListener('click', () => {
+            startScreen.style.opacity = '0';
+            setTimeout(() => {
+                startScreen.style.display = 'none';
+                mainContent.style.display = 'block';
+                
+                // Iniciamos el canvas y la animación
+                initApp();
+            }, 600);
+        });
+
+        // ==================== CÓDIGO ORIGINAL ====================
+        function initApp() {
+            const canvas       = document.getElementById('fallingCanvas');
+            const ctx          = canvas.getContext('2d');
+            const scrollCont   = document.getElementById('scrollContainer');
+            const wrapper      = document.getElementById('graphWrapper');
+            const stackedWords = document.getElementById('stackedWords');
+            const continueBtn  = document.getElementById('continueBtn');
+
+            canvas.width  = window.innerWidth;
+            canvas.height = window.innerHeight;
+            window.addEventListener('resize', () => {
+                canvas.width  = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+
+            const wordList = [
+    "Sin Dios",
+    "Idolatría",
+    "Irreverencia",
+    "Blasfemia",
+    "Sin Misa",
+    "Irrespetuoso con Dios",
+    "Desobediencia",
+    "Irrespetuoso con otros",
+    "Violento",
+    "Imprudente",
+    "Impureza",
+    "Pornografía",
+    "Robo",
+    "Avaricia",
+    "Mentira",
+    "Calumnia",
+    "Impureza mental",
+    "Falta de respeto",
+    "Envidia",
+    "Codicia"            ];
+
+            const FALL_SPEED_NORMAL = 1;
+            const SPAWN_INTERVAL    = 3000;
+            const FONT_SIZE         = 18;
+            let fallSpeed  = FALL_SPEED_NORMAL;
+            let boosted    = false;
+
+            const zoneValues = { mucho: 3, regular: 2, poco: 1, nada: 0 };
+
+            const svgBoxes = [
+                { id:'mucho',   svgX1:20,  svgX2:210, svgY2:60, color:'#c0392b', vanish:false },
+                { id:'regular', svgX1:235, svgX2:425, svgY2:60, color:'#e67e22', vanish:false },
+                { id:'poco',    svgX1:450, svgX2:640, svgY2:60, color:'#27ae60', vanish:false },
+                { id:'nada',    svgX1:665, svgX2:880, svgY2:60, color:'#2c3e50', vanish:true  },
+            ];
+
+            const boxStacks = { mucho:[], regular:[], poco:[], nada:[] };
+            let results = [];
+            let processedWords = 0;
+
+            function svgEl() { return document.getElementById('mainSvg'); }
+
+            function svgToScreen(svgX, svgY) {
+                const svg = svgEl();
+                const pt  = svg.createSVGPoint();
+                pt.x = svgX; pt.y = svgY;
+                const s = pt.matrixTransform(svg.getScreenCTM());
+                return { x: s.x, y: s.y };
+            }
+
+            function svgToWrapper(svgX, svgY) {
+                const s  = svgToScreen(svgX, svgY);
+                const wr = wrapper.getBoundingClientRect();
+                return { x: s.x - wr.left, y: s.y - wr.top };
+            }
+
+            function getBoxScreenX(box) {
+                return {
+                    x1: svgToScreen(box.svgX1, 0).x,
+                    x2: svgToScreen(box.svgX2, 0).x
+                };
+            }
+
+            function getCollisionYScreen(box) {
+                const topY   = svgToScreen(box.svgX1, box.svgY2).y;
+                const stackH = boxStacks[box.id].reduce((s,e) => s + e.h + 2, 0);
+                return topY - stackH;
+            }
+
+            function landWord(fw, box) {
+                fw.landed = true;
+                if (boosted) {
+                    fallSpeed = FALL_SPEED_NORMAL;
+                    boosted   = false;
+                }
+
+                const value = zoneValues[box.id] || 0;
+                results.push({ word: fw.word, value: value });
+                processedWords++;
+
+                if (!box.vanish) {
+                    const stack  = boxStacks[box.id];
+                    const cx     = svgToWrapper((box.svgX1 + box.svgX2) / 2, box.svgY2).x;
+                    const topY   = svgToWrapper(box.svgX1, box.svgY2).y;
+                    const sx     = getBoxScreenX(box);
+                    const boxPxW = sx.x2 - sx.x1;
+
+                    ctx.font = `bold ${fw.fontSize}px Arial`;
+                    const elW    = Math.min(ctx.measureText(fw.word).width + 12, boxPxW - 8);
+                    const elH    = fw.fontSize + 8;
+                    const stackH = stack.reduce((s,e) => s + e.h + 0.5, 0);
+
+                    const div = document.createElement('div');
+                    div.textContent = fw.word;
+                    div.style.cssText = `
+                        position:absolute;
+                        left:${cx - elW/2}px;
+                        top:${topY - stackH - elH}px;
+                        width:${elW}px; height:${elH}px;
+                        font-size:${fw.fontSize}px; font-weight:bold; font-family:Arial,sans-serif;
+                        color:white; background:${box.color}cc;
+                        border-radius:6px;
+                        display:flex; align-items:center; justify-content:center;
+                        white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+                        box-shadow:0 2px 6px rgba(0,0,0,0.18);
+                    `;
+                    stackedWords.appendChild(div);
+                    stack.push({ el:div, h:elH });
+                }
+
+                checkIfFinished();
+            }
+
+            const wordQueue = [...wordList];
+            let wordQueueIndex = 0;
+
+            function makeWord() {
+                if (wordQueueIndex >= wordQueue.length) return null;
+                const word = wordQueue[wordQueueIndex++];
+                ctx.font = `bold ${FONT_SIZE}px Arial`;
+                const w = ctx.measureText(word).width + 12;
+                const h = FONT_SIZE + 10;
+                const x = window.innerWidth / 2 - w / 2;
+                const scRect = scrollCont.getBoundingClientRect();
+                return { word, fontSize:FONT_SIZE, w, h, x, y: scRect.top + 10, landed:false };
+            }
+
+            let fallingWords = [];
+            let lastSpawn    = 0;
+
+            const TAP_MAX_MOVE = 8;
+            const TAP_MAX_TIME = 300;
+            let pointerStartX = 0, pointerStartY = 0, pointerStartTime = 0;
+            let isTap = false;
+
+            document.addEventListener('pointerdown', (e) => {
+                pointerStartX    = e.clientX;
+                pointerStartY    = e.clientY;
+                pointerStartTime = Date.now();
+                isTap = true;
+            });
+
+            document.addEventListener('pointermove', (e) => {
+                if (!isTap) return;
+                const dx = Math.abs(e.clientX - pointerStartX);
+                const dy = Math.abs(e.clientY - pointerStartY);
+                if (dx > TAP_MAX_MOVE || dy > TAP_MAX_MOVE) isTap = false;
+            });
+
+            document.addEventListener('pointerup', () => {
+                const elapsed = Date.now() - pointerStartTime;
+                if (isTap && elapsed < TAP_MAX_TIME) {
+                    fallSpeed = FALL_SPEED_NORMAL * 5;
+                    boosted   = true;
+                }
+                isTap = false;
+            });
+
+            function checkIfFinished() {
+                if (processedWords === wordList.length) {
+                    localStorage.setItem('resultados', JSON.stringify(results));
+                    continueBtn.style.display = 'block';
+                }
+            }
+
+            continueBtn.addEventListener('click', () => {
+                window.location.href = "https://www.yomeconfieso.es/3-preguntas-jovenes/";
+            });
+
+            function animate(ts) {
+                requestAnimationFrame(animate);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                if (ts - lastSpawn > SPAWN_INTERVAL && wordQueueIndex < wordQueue.length) {
+                    const w = makeWord();
+                    if (w) fallingWords.push(w);
+                    lastSpawn = ts;
+                }
+
+                fallingWords = fallingWords.filter(fw => {
+                    if (fw.landed) return false;
+
+                    fw.y += fallSpeed;
+
+                    for (const box of svgBoxes) {
+                        const sx     = getBoxScreenX(box);
+                        const colY   = getCollisionYScreen(box);
+                        const wordCX = fw.x + fw.w / 2;
+
+                        if (wordCX >= sx.x1 && wordCX <= sx.x2 && fw.y + fw.h >= colY) {
+                            landWord(fw, box);
+                            return false;
+                        }
+                    }
+
+                    if (fw.y > window.innerHeight + 50) {
+                        results.push({ word: fw.word, value: 0 });
+                        processedWords++;
+                        checkIfFinished();
+                        return false;
+                    }
+
+                    if (!fw.landed) {
+                        ctx.save();
+                        ctx.font        = `bold ${fw.fontSize}px Arial`;
+                        ctx.globalAlpha = 0.88;
+                        ctx.fillStyle   = '#ecf0f1';
+                        ctx.beginPath();
+                        ctx.roundRect(fw.x, fw.y, fw.w, fw.h, 6);
+                        ctx.fill();
+                        ctx.fillStyle    = '#2c3e50';
+                        ctx.textAlign    = 'center';
+                        ctx.textBaseline = 'middle';
+                        ctx.fillText(fw.word, fw.x + fw.w/2, fw.y + fw.h/2);
+                        ctx.restore();
+                    }
+
+                    return true;
+                });
+            }
+
+            requestAnimationFrame(animate);
+        }
+    </script>
+
+

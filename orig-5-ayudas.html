@@ -1,0 +1,287 @@
+<!-- 5-ayudas -->
+
+<!-- ===== HEADING ===== -->
+<div><h1>algunas ayudas antes<br>De confesarte</h1></div>
+
+<!-- ===== TEXT ===== -->
+<div><p><span class="desktop-font-size-20">En estas pestañas encontrarás algunas ayudas para antes de la confesión.&nbsp;</span></p></div>
+
+<!-- ===== CODE ===== -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>App Unificada</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background: #fafafa;
+}
+
+/* ACORDEÓN */
+.accordion { width: 100%; }
+
+.accordion-item { border-bottom: 1px solid #ccc; }
+
+/* PESTAÑAS */
+.accordion-item label {
+  display: block;
+  padding: 18px;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  background: rgba(224,224,224,0.5);
+  backdrop-filter: blur(6px);
+}
+
+.accordion-item label:hover {
+  background: rgba(208,208,208,0.5);
+}
+
+.content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  background: #fff;
+  padding: 0 9px;
+  font-size: 1.25rem;
+  line-height: 1.6;
+}
+
+.content strong { font-size: 1.35rem; }
+
+.accordion-item input:checked ~ .content {
+  max-height: 2000px;
+  padding: 9px;
+}
+
+.accordion-item input { display: none; }
+
+/* VIDEO */
+iframe {
+  width: 100%;
+  height: 250px;
+  border: none;
+  margin-top: 10px;
+}
+
+/* PARROQUIAS */
+#parroquias {
+  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.parroquia-item {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 14px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.parroquia-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+
+.parroquia-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nombre { font-weight: 600; font-size: 16px; }
+.distancia { font-size: 14px; color: #666; }
+
+.parroquia-item button {
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 14px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.parroquia-item button:hover { background: #0056b3; }
+</style>
+
+<div class="accordion">
+
+  <div class="accordion-item">
+    <input type="checkbox" id="videoBox">
+    <label for="videoBox">▶️ Get Clean</label>
+    <div class="content">
+      <p>Esto es lo que sucede cuando te confiesas</p>
+      <iframe id="video"></iframe>
+    </div>
+  </div>
+
+  <div class="accordion-item">
+    <input type="checkbox" id="tab1">
+    <label for="tab1">🙏 Oración de arrepentimiento a Jesús</label>
+    <div class="content">
+      <p><strong>Acto de contrición</strong><br><br>
+      Señor mío Jesucristo, Dios y Hombre verdadero,<br>
+      Creador y Redentor mío; por ser Vos quien sois, Bondad infinita,<br>
+      y porque os amo sobre todas las cosas, me pesa de todo corazón haberos ofendido;<br>
+      también me pesa porque puedo condenarme con las penas del infierno.<br>
+      Ayudado de vuestra divina gracia,<br>
+      propongo firmemente nunca más pecar,<br>
+      confesarme y cumplir la penitencia que me fuera impuesta.<br>
+      Amén.</p>
+    </div>
+  </div>
+
+  <div class="accordion-item">
+    <input type="checkbox" id="tab2">
+    <label for="tab2">🙏 Oración a la Virgen María</label>
+    <div class="content">
+      <p><strong>Acordaos</strong><br><br>
+      Acordaos, ¡oh piadosísima Virgen María!,<br>
+      que jamás se ha oído decir que ninguno de los que<br>
+      han acudido a vuestra protección,<br>
+      implorando vuestra asistencia y reclamando vuestro socorro haya sido abandonado.<br>
+      Animado con esta confianza a Vos también acudo,<br>
+      ¡oh Madre, Virgen de las vírgenes!<br>
+      y gimiendo bajo el peso de mis pecados,<br>
+      me atrevo a comparecer ante vuestra presencia soberana.<br>
+      No desechéis, ¡oh Madre de Dios!,<br>
+      mis humildes súplicas, antes bien escuchadlas<br>
+      y acogedlas benignamente. Amén.</p>
+    </div>
+  </div>
+
+  <div class="accordion-item">
+    <input type="checkbox" id="tab3">
+    <label for="tab3">⛪️ Parroquias cercanas (Puede haber errores).</label>
+    <div class="content">
+      <div id="parroquias"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const videoBox = document.getElementById("videoBox");
+const iframe = document.getElementById("video");
+const baseURL = "https://drive.google.com/file/d/1yPGe-n3ocjqpIP_Vee-cXxUmL87EuG8i/preview";
+
+videoBox.addEventListener("change", () => {
+  iframe.src = videoBox.checked ? baseURL : "";
+});
+
+const tab3 = document.getElementById("tab3");
+tab3.addEventListener("change", () => { 
+  if (tab3.checked) listarParroquias(); 
+});
+
+let userLat, userLon;
+
+function calcularDistancia(lat1, lon1, lat2, lon2) {
+  const R = 6371000;
+  const toRad = x => x * Math.PI / 180;
+  const dLat = toRad(lat2 - lat1);
+  const dLon = toRad(lon2 - lon1);
+
+  const a = Math.sin(dLat/2)**2 +
+            Math.cos(toRad(lat1)) *
+            Math.cos(toRad(lat2)) *
+            Math.sin(dLon/2)**2;
+
+  return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
+}
+
+function listarParroquias() {
+  const container = document.getElementById("parroquias");
+  container.innerHTML = "📍 Buscando parroquias cercanas...";
+
+  if (!navigator.geolocation) {
+    container.innerHTML = "❌ Tu navegador no soporta geolocalización";
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    position => {
+      userLat = position.coords.latitude;
+      userLon = position.coords.longitude;
+
+      const query = `
+        [out:json];
+        (
+          node["amenity"="place_of_worship"]["religion"="christian"][denomination=catholic](around:10000,${userLat},${userLon});
+          way["amenity"="place_of_worship"]["religion"="christian"][denomination=catholic](around:10000,${userLat},${userLon});
+        );
+        out center;
+      `;
+
+      fetch("https://overpass-api.de/api/interpreter", {
+        method: "POST",
+        headers: { "Content-Type": "text/plain" },
+        body: query
+      })
+      .then(res => res.json())
+      .then(data => {
+        container.innerHTML = "";
+
+        if (!data.elements.length) {
+          container.innerHTML = "😕 No se encontraron parroquias cercanas";
+          return;
+        }
+
+        const parroquias = data.elements
+          .map(el => {
+            const lat = el.lat ?? el.center?.lat;
+            const lon = el.lon ?? el.center?.lon;
+            if (!lat || !lon) return null;
+
+            const nombre = el.tags?.name || "Parroquia";
+            const distancia = Math.round(calcularDistancia(userLat, userLon, lat, lon));
+
+            return { nombre, lat, lon, distancia };
+          })
+          .filter(p => p !== null)
+          .sort((a, b) => a.distancia - b.distancia)
+          .slice(0, 10);
+
+        parroquias.forEach(p => {
+          const div = document.createElement("div");
+          div.className = "parroquia-item";
+          div.innerHTML = `
+            <div class="parroquia-header">
+              <span class="nombre">${p.nombre}</span>
+              <span class="distancia">${p.distancia} m</span>
+            </div>
+            <button onclick="irAGoogleMaps(${p.lat}, ${p.lon})">
+              Cómo llegar
+            </button>`;
+          container.appendChild(div);
+        });
+      })
+      .catch(err => {
+        container.innerHTML = "❌ Error al cargar parroquias";
+        console.error(err);
+      });
+    },
+    error => {
+      container.innerHTML = "❌ Activa la ubicación para ver parroquias cercanas";
+      console.error(error);
+    }
+  );
+}
+
+function irAGoogleMaps(lat, lon) {
+  window.open(
+    `https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLon}&destination=${lat},${lon}`,
+    "_blank"
+  );
+}
+</script>
+
+<!-- ===== TEXT ===== -->
+<div><p><span class="desktop-font-size-20">¿Ya estás dispuesto? Pulsa el botón cuando estés en la Iglesia o junto al lugar y al sacerdote con el que te vas a confesar.&nbsp;</span></p></div>
