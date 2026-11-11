@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Terminando · yomeconfieso</title>
+<meta name="description" content="Después de la confesión.">
+<link rel="canonical" href="https://www.yomeconfieso.es/7-final/">
+<meta property="og:title" content="Terminando · yomeconfieso">
+<meta property="og:description" content="Después de la confesión.">
+<meta property="og:image" content="https://www.yomeconfieso.es/img/abrazo.jpg">
+<meta property="og:locale" content="es_ES">
+<link rel="icon" href="/favicon.png">
+<link rel="apple-touch-icon" href="/img/icono-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/estilo.css">
+</head>
+<body class="yc">
+<header class="yc-cabecera"><a class="yc-marca" href="/" aria-label="Inicio"><img src="/img/logo.png" alt="yo me confieso"></a><nav class="yc-menu"><a href="/">Inicio</a><a href="/0-dudas/">Dudas</a><a href="/contacto/">Contacto</a></nav></header>
+<main class="yc-principal">
+<header class="yc-titular"><h1>Terminando...</h1></header>
+<div class="pagina">
+<style>
+.pagina .story {
+  max-width:700px;
+  margin:0 auto;
+  padding:5px 0 40px 0;
+}
+.pagina .story p {
+  max-width:680px;
+  margin:28px auto;
+  padding:0 14px;
+  text-align:center;
+  font-size:1.25rem;
+  line-height:1.6;
+  opacity:0;
+  transform:translateY(40px);
+  transition:opacity 1.2s ease, transform 1.2s ease;
+}
+.pagina .story p:first-child {
+  margin-top:8px;
+  text-align:left;
+  padding:0 20px;
+}
+.pagina .dedos {
+  text-align:center;
+  font-size:2.8rem;
+  margin:35px auto 25px auto;
+  opacity:0;
+  transition:opacity 1s ease;
+}
+.pagina .dedos.visible { opacity:1; }
+.pagina .story p.visible { opacity:1; transform:translateY(0); }
+.pagina .share-buttons {
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  margin:40px auto 80px auto;
+  opacity:0;
+  transition:opacity .8s ease-in;
+  flex-wrap:wrap;
+}
+.pagina .share-buttons.visible { opacity:1; }
+.pagina .share-btn {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:60px;
+  height:60px;
+  border-radius:50%;
+  color:white;
+  text-decoration:none;
+  transition:all .25s;
+  box-shadow:0 4px 12px rgba(0,0,0,0.3);
+}
+.pagina .share-btn svg {
+  width:28px;
+  height:28px;
+  fill:white;
+}
+.pagina .share-btn:hover {
+  transform:scale(1.15);
+}
+.pagina .share-btn:active {
+  transform:scale(0.95);
+}
+.pagina .x { background:#000; }
+.pagina .instagram { background:linear-gradient(135deg, #f56040, #c13584, #405de6); }
+.pagina .tiktok { background:#000; }
+.pagina .whatsapp { background:#25D366; }
+.pagina .contacto-final {
+  text-align:center;
+  font-size:1rem;
+  margin:40px 20px 60px 20px;
+  opacity:.9;
+}
+.pagina .contacto-final a {
+  color:#38bdf8;
+  font-weight:600;
+  text-decoration:none;
+}
+.pagina .contacto-final a:hover {
+  text-decoration:underline;
+}
+
+</style>
+
+<div class="story">
+<p>Ya solo te queda rezar - o hacer- la penitencia. Este gesto es una expresión de tu amistad con Dios, como la fiesta después de la reconciliación.</p>
+<p>Confesarse, ya lo has visto, es una gozada, puede costar un poco pero es una experiencia de profunda alegría y paz interior.</p>
+<p>Ánimo, no lo dejes, sigue confesándote y, lo antes posible, recibiendo la Comunión.</p>
+<p>Te dejo unos botones por si quieres mandar un whatsapp a alguien recomendando la web o publicarlo en X, Instagram o TikTok. Sería estupendo.</p>
+<p>Oye, ha sido una gozada acompañarte en esta experiencia. Un abrazo muy fuerte.</p>
+
+<p class="dedos" id="dedos">👇👇👇👇</p>
+</div>
+
+<div class="share-buttons" id="buttons">
+  <a href="#" class="share-btn x" id="btnX" title="Compartir en X">
+    <svg viewBox="0 0 24 24"><path d="M18.244 2H21l-6.56 7.5L22 22h-6.828l-5.35-7.056L3.5 22H1l7.04-8.046L2 2h6.828l4.87 6.438L18.244 2Zm-2.4 18h1.885L7.1 4H5.1l10.744 16Z"></path></svg>
+  </a>
+
+  <a href="#" class="share-btn instagram" id="btnIG" title="Compartir en Instagram">
+    <svg viewBox="0 0 24 24"><path d="M7 2C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 0 5-2.2 5-5V7c0-2.8-2.2-5-5-5H7Zm5 5.5A4.5 4.5 0 1 1 7.5 12 4.5 4.5 0 0 1 12 7.5Zm0 7.4A2.9 2.9 0 1 0 9.1 12 2.9 2.9 0 0 0 12 14.9ZM17.8 6.2a1.1 1.1 0 1 1-1.1-1.1 1.1 1.1 0 0 1 1.1 1.1Z"></path></svg>
+  </a>
+
+  <a href="#" class="share-btn tiktok" id="btnTT" title="Compartir en TikTok">
+    <svg viewBox="0 0 24 24"><path d="M12.5 2h3a5 5 0 0 0 4 4v3a8 8 0 0 1-4-1v7a6 6 0 1 1-6-6c.3 0 .6 0 .9.1v3a3 3 0 1 0 2.1 2.9V2Z"></path></svg>
+  </a>
+
+  <a href="#" class="share-btn whatsapp" id="btnWA" title="Enviar por WhatsApp">
+    <svg viewBox="0 0 24 24"><path d="M20.5 3.5A11 11 0 0 0 3.8 17.8L2 22l4.3-1.7A11 11 0 1 0 20.5 3.5Zm-8.5 17a8.5 8.5 0 0 1-4.3-1.2l-.3-.2-2.6 1 1-2.5-.2-.3A8.5 8.5 0 1 1 12 20.5Zm4.6-6.4c-.3-.1-1.6-.8-1.9-.9-.3-.1-.5-.1-.7.1-.2.3-.8.9-1 1.1-.2.2-.4.2-.7.1a7 7 0 0 1-2-1.2 7.7 7.7 0 0 1-1.4-1.7c-.1-.3 0-.5.1-.7l.5-.6c.2-.2.2-.4.3-.6.1-.2 0-.4 0-.6s-.7-1.6-1-2.2c-.3-.6-.6-.5-.8-.5h-.7c-.2 0-.6.1-.9.4s-1.1 1.1-1.1 2.7 1.2 3.1 1.4 3.3c.2.3 2.3 3.5 5.6 4.8.8.3 1.4.5 1.9.6.8.1 1.5.1 2.1.1.6 0 1.6-.6 1.8-1.2.2-.6.2-1.1.1-1.2-.1-.1-.3-.2-.6-.3Z"></path></svg>
+  </a>
+</div>
+
+<p class="contacto-final">
+¿Quieres decirme algo? Tienes un formulario de contacto pulsando 
+<a href="/contacto/" target="_blank">AQUÍ</a>
+</p>
+
+<script>
+// Animación
+const paragraphs = document.querySelectorAll('.story p');
+const buttonsContainer = document.getElementById('buttons');
+const dedos = document.getElementById('dedos');
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add("visible");
+      if (entry.target === paragraphs[paragraphs.length-1]) {
+        setTimeout(() => {
+          buttonsContainer.classList.add('visible');
+          dedos.classList.add('visible');
+        }, 800);
+      }
+    }
+  });
+}, { threshold: 0, rootMargin: "0px 0px -10% 0px" });
+
+paragraphs.forEach(p => observer.observe(p));
+
+// ==================== FUNCIONALIDAD BOTONES ====================
+
+const shareText = "Si te cuesta confesarte o hace mucho que no lo haces te ayudará esta web www.yomeconfieso.es , a mí me ha encantado.";
+
+// WhatsApp
+document.getElementById('btnWA').addEventListener('click', (e) => {
+  e.preventDefault();
+  navigator.clipboard.writeText(shareText).then(() => {
+    const mensajeCodificado = encodeURIComponent(shareText);
+    window.open(`https://wa.me/?text=${mensajeCodificado}`, "_blank");
+    alert("✅ Texto copiado y WhatsApp abierto.\n\nElige el contacto y envía.");
+  }).catch(() => {
+    window.open(`https://wa.me/?text=${encodeURIComponent(shareText)}`, "_blank");
+  });
+});
+
+// X
+document.getElementById('btnX').addEventListener('click', (e) => {
+  e.preventDefault();
+  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`, '_blank');
+});
+
+// Instagram
+document.getElementById('btnIG').addEventListener('click', (e) => {
+  e.preventDefault();
+  navigator.clipboard.writeText(shareText).then(() => {
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+      window.location.href = "instagram://camera";
+    } else {
+      window.open("https://www.instagram.com/", "_blank");
+    }
+    alert("✅ Texto copiado.\n\nPégalo en Instagram.");
+  }).catch(() => {
+    window.open("https://www.instagram.com/", "_blank");
+  });
+});
+
+// TikTok
+document.getElementById('btnTT').addEventListener('click', (e) => {
+  e.preventDefault();
+  navigator.clipboard.writeText(shareText).then(() => {
+    const tiktokCreate = "snssdk1233://feed/create";
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+      window.location.href = tiktokCreate;
+      setTimeout(() => window.location.href = "tiktok://", 600);
+    } else {
+      window.open("https://www.tiktok.com/upload", "_blank");
+    }
+    alert("✅ Texto copiado.\n\nAbre TikTok y pega el texto.");
+  }).catch(() => {
+    window.open("https://www.tiktok.com/upload", "_blank");
+  });
+});
+</script>
+</div>
+</main>
+<footer class="yc-pie">yomeconfieso.es · <a href="/0-dudas/">Dudas</a> · <a href="/contacto/">Contacto</a></footer>
+</body>
+</html>

@@ -1,0 +1,167 @@
+/* ===== yomeconfieso.es — estilos comunes ===== */
+:root {
+  --dorado: rgb(153, 112, 10);
+  --turquesa: rgb(89, 193, 192);
+  --turquesa-osc: rgb(58, 150, 149);
+  --texto: #1f1b2e;
+  --velo: rgba(247, 245, 252, 0.80);
+  --ancho: 760px;
+}
+
+html { -webkit-text-size-adjust: 100%; }
+
+body.yc {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: "Raleway", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: var(--texto);
+  background: #e9e4f2;
+}
+
+/* Fondo: el cuadro del abrazo, fijo y velado */
+body.yc::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background: url("../img/abrazo.jpg") center 30% / cover no-repeat;
+}
+body.yc::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: var(--velo);
+}
+body.yc.portada::after { background: rgba(247, 245, 252, 0.15); }
+
+/* ===== Cabecera ===== */
+.yc-cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  max-width: 1100px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 12px 20px;
+  box-sizing: border-box;
+}
+.yc-marca { display: block; line-height: 0; }
+.yc-marca img { height: 56px; width: auto; filter: drop-shadow(0 1px 2px rgba(0,0,0,.35)); }
+.yc-menu { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+.yc-menu a {
+  font: 600 0.82rem/1 "Raleway", sans-serif;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--texto);
+  padding: 9px 12px;
+  border-radius: 6px;
+  transition: background .2s;
+}
+.yc-menu a:hover { background: rgba(255,255,255,.6); }
+.yc-menu a.activo { background: var(--dorado); color: #fff; }
+.portada .yc-menu a { color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,.5); }
+.portada .yc-menu a.activo { text-shadow: none; }
+
+/* ===== Contenido ===== */
+.yc-principal { flex: 1; width: 100%; }
+
+.yc-titular {
+  max-width: var(--ancho);
+  margin: 24px auto 8px;
+  padding: 0 20px;
+  text-align: center;
+}
+.yc-titular h1 {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-weight: 500;
+  text-transform: uppercase;
+  color: var(--dorado);
+  font-size: clamp(2rem, 7vw, 3.3rem);
+  line-height: 1.08;
+  margin: 0;
+}
+.yc-titular .yc-sub {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  color: var(--dorado);
+  font-size: clamp(1.6rem, 5vw, 2.3rem);
+  margin: 10px 0 0;
+}
+
+.yc-texto {
+  max-width: var(--ancho);
+  margin: 0 auto;
+  padding: 0 24px;
+  font-size: 1.15rem;
+  line-height: 1.65;
+}
+.yc-texto p { margin: 14px 0; }
+.yc-texto a { color: var(--turquesa-osc); font-weight: 700; }
+.yc-aviso {
+  text-align: center;
+  font-size: 1.25rem;
+  color: var(--dorado);
+}
+
+.pagina { max-width: var(--ancho); margin: 0 auto; }
+.pagina.ancha { max-width: 1000px; }
+
+.yc-boton {
+  display: block;
+  width: 80%;
+  max-width: 420px;
+  margin: 28px auto 50px;
+  padding: 15px 28px;
+  border-radius: 8px;
+  background: var(--turquesa);
+  color: #fff;
+  text-align: center;
+  text-decoration: none;
+  font: 700 1rem "Raleway", sans-serif;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  box-shadow: 0 6px 18px rgba(0,0,0,.15);
+  transition: transform .2s, box-shadow .2s;
+}
+.yc-boton:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(0,0,0,.2); }
+
+/* ===== Pie ===== */
+.yc-pie {
+  text-align: center;
+  font-size: .85rem;
+  padding: 26px 20px 30px;
+  color: #4a4560;
+}
+.yc-pie a { color: inherit; }
+.portada .yc-pie { color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,.5); }
+
+/* ===== Portada ===== */
+.yc-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4vh 20px 0;
+}
+.yc-hero h1 { margin: 0; line-height: 0; }
+.yc-hero h1 img {
+  width: min(70vw, 360px);
+  height: auto;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,.35));
+}
+.yc-lema {
+  margin: 18px 0 0;
+  color: #fff;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(1.3rem, 4vw, 1.7rem);
+  text-align: center;
+  text-shadow: 0 1px 4px rgba(0,0,0,.6);
+}
+
+@media (min-width: 900px) {
+  .yc-marca img { height: 64px; }
+  .yc-texto { font-size: 1.2rem; }
+}

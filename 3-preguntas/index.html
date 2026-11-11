@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Preguntas del examen · yomeconfieso</title>
+<meta name="description" content="Preguntas del examen de conciencia.">
+<link rel="canonical" href="https://www.yomeconfieso.es/3-preguntas/">
+<meta property="og:title" content="Preguntas del examen · yomeconfieso">
+<meta property="og:description" content="Preguntas del examen de conciencia.">
+<meta property="og:image" content="https://www.yomeconfieso.es/img/abrazo.jpg">
+<meta property="og:locale" content="es_ES">
+<link rel="icon" href="/favicon.png">
+<link rel="apple-touch-icon" href="/img/icono-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/estilo.css">
+</head>
+<body class="yc">
+<header class="yc-cabecera"><a class="yc-marca" href="/" aria-label="Inicio"><img src="/img/logo.png" alt="yo me confieso"></a><nav class="yc-menu"><a href="/">Inicio</a><a href="/0-dudas/">Dudas</a><a href="/contacto/">Contacto</a></nav></header>
+<main class="yc-principal">
+<header class="yc-titular"><h1>ALGUNAS PREGUNTAS preparadas para ti</h1></header>
+<div class="yc-texto"><p>Vamos con las preguntas sobre la lista 📋 que has ordenado antes.&nbsp;</p><p>En cada pregunta piensa, desde la última vez que te confesaros, si has cometido ese pecado “Muchas veces”, “Algunas veces”, “Pocas veces” o “Nunca”. Cada vez que selecciones la frecuencia de una pregunta saldrá la siguiente y así hasta completar todas.</p><p>Al finalizar verás un botón para continuar con tu preparación.</p></div>
+<div class="pagina">
+<style>
+.pagina #chat {
+    padding: 10px;
+    height: 75vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.pagina #progress-container {
+    width: 95%;
+    margin: 0 auto 20px auto;
+    background: #ccc;
+    height: 20px;
+    border-radius: 10px;
+    overflow: hidden;
+    display: none;
+}
+.pagina #progress-bar {
+    width: 0%;
+    height: 100%;
+    background: rgb(89, 193, 192);
+    transition: width 0.3s;
+}
+.pagina .message {
+    padding: 10px 15px;
+    margin: 5px 0;
+    border-radius: 20px;
+    max-width: 95%;
+    display: flex;
+    flex-direction: column;
+    animation: fadeIn 0.5s;
+    font-size: 1.25rem;
+}
+.pagina .bot {
+    background: #dcf8c6;
+    border-top-left-radius: 5px;
+    margin-right: auto;
+}
+.pagina .buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+.pagina button {
+    padding: 6px 10px;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    background: rgba(0,0,0,0.08);
+    transition: background 0.2s;
+    font-size: 1rem;
+}
+.pagina button.selected {
+    background: rgb(89, 193, 192);
+    color: white;
+}
+.pagina .start {
+    margin: 10px auto;
+    padding: 12px 18px;
+    font-size: 1.5rem;
+    border-radius: 12px;
+    background: rgb(89, 193, 192);
+    color: White;
+    border: none;
+    cursor: pointer;
+    display: block;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.pagina .start:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+.pagina .final-btn {
+    margin: 15px;
+    padding: 14px 20px;
+    font-size: 1.1rem;
+    border-radius: 12px;
+    background: rgb(89, 193, 192);
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    width: calc(100% - 30px);
+    box-sizing: border-box;
+}
+.pagina .copy-btn {
+    margin: 0 15px 15px 15px;
+    padding: 14px 20px;
+    font-size: 1.1rem;
+    border-radius: 12px;
+    background: rgb(89, 193, 192);
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    width: calc(100% - 30px);
+    box-sizing: border-box;
+}
+.pagina .extra-texto-container {
+    padding: 10px 15px;
+    margin: 5px 0 0 0;
+    background: #dcf8c6;
+    border-radius: 20px;
+    border-top-left-radius: 5px;
+    max-width: 95%;
+    font-size: 1.25rem;
+}
+.pagina .extra-texto-container label {
+    display: block;
+    margin-bottom: 8px;
+}
+.pagina .extra-texto-container textarea {
+    width: 100%;
+    min-height: 100px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    padding: 8px;
+    font-size: 1rem;
+    font-family: Arial, sans-serif;
+    resize: vertical;
+    box-sizing: border-box;
+    background: #fff;
+}
+
+</style>
+
+<button class="start" onclick="iniciarChat()">INICIAR CHAT</button>
+
+<div id="chat"></div>
+
+<div id="progress-container">
+    <div id="progress-bar"></div>
+</div>
+
+<script>
+let preguntas = [];
+let index = 0;
+let respuestasUsuario = {};
+
+const preguntasMap = {
+  "Soberbia": {0: [],1: ["He reaccionado alguna vez con mala cara cuando me he sentido humillado."],2: ["Me enfado cuando me dicen algo que me humilla.","Quiero quedar siempre por encima de los demás y dejo a otros por debajo de mí."],3: ["Me siento, con frecuencia, superior a los demás y incluso menospreciándoles.","Reclamo la atención y los halagos de los demás. me enfado cuando me critican o me hacen de menos.","Insisto siempre hasta que me salgo con la mía y/o me enfado si no me hacen caso."]},
+  "Crítica": {0: [],1: ["Participo en ocasiones participo en cotilleos o críticas."],2: ["He hablado mal de alguna persona de mi entorno.","He sido indiscreto en mis comentarios con otras personas."],3: ["He juzgado temerariamente o con dureza a los demás atribuyéndoles malas intenciones sin pruebas suficientes, o condenándolos en mi corazón sin caridad.","He hablado mal de alguien a sus espaldas (murmuración), revelando defectos reales o exagerándolos, o criticando destructivamente sin necesidad ni con ánimo de ayudar.","He escuchado con gusto o participado en conversaciones donde se critica, se murmura o se juzga a otros, sin defender al ausente ni poner remedio., he sembrado discordia con mis comentarios negativos."]},
+  "Pornografía": {0: [],1: ["He visto alguna cosa impura en el móvil o en tv."],2: ["He visto imágenes impuras explicitas en internet.","He visto escenas o vídeos con alto contenido sexual."],3: ["He visto imágenes explícitas sexuales.","He buscado y visto vídeos pornográficos.","He entrado en páginas web de contenido pornográfico (incluso pagando por ello)."]},
+  "Impureza": {0: [],1: ["He cometido algún acto impuro yo solo/a o en compañía de otros/as."],2: ["He caído en pecado de masturbación o en tocamientos impuros.","He mantenido relaciones sexuales con otras personas (incluso de mi propio sexo) (incluso estando casado)."],3: ["Me he masturbado algunas veces.","He mantenido relaciones sexuales con otras personas (incluso de mi mismo sexo) (incluso estando casado o siendo consagrado).","He acudido a la prostitución o prácticas similares."]},
+  "Ira": {0: [],1: ["Me enfado alguna vez y creo mal ambiente entre los míos."],2: ["Me he enfadado gritando, insultando o con malos modos.","He sido violento con las personas de mi entorno por mi enfado."],3: ["He gritado o insultado de malas formas en casa, en el trabajo, universidad….","He sido violento en mis gestos o mis reacciones debido al enfado.","He hecho daño a otras personas emocionalmente (insultos, humillaciones, etc.) o físicamente (agresiones)." ]},
+  "Gula": {0: [],1: ["He comido o bebido más de lo debido solo por puro gusto, sin moderación."],2: ["He comido con avidez y glotonería, sin moderación y si agradecer a Dios lo recibido.","He dañado mi salud por comer o beber en exceso."],3: ["He abusado del alcohol, refrescos, dulces, redes sociales, series o videojuegos hasta perder el control del tiempo.","He dañado mi salud por comer/beber en exceso o por malos hábitos.","He comido tan en exceso que he terminado vomitando o dañando mi cuerpo de cualquier otra forma."]},
+  "Envidia": {0: [],1: ["Tengo envidia o celos de alguna persona."],2: ["He consentido los celos o la envidia en mi corazón por lo que tienen los demás (dinero, amigos, éxitos, regalos, cualidades), sin luchar contra ese sentimiento.","He comparado mi vida con la de otros y fomentando el sentimiento de que yo soy inferior o resentido con Dios por eso."],3: ["Me ha molestado o entristecido que a otra persona le vaya bien (en estudios, trabajo, familia, apariencia, talentos) y he hecho algo malo o no he luchad contra ese sentimiento.","Me he alegrado en secreto cuando a alguien le ha ido mal o ha tenido un fracaso.","He consentido el pensamiento de que a mí Dios no me quiere tanto como a otros que les da lo que yo querría tener."]},
+  "Odio": {0: [],1: ["He guardado rencor, resentimiento u odio hacia alguna persona en mi corazón."],2: ["Deseo el mal a alguien (que le pase algo malo, que sufra, que fracase).","Me estoy negando a perdonar a alguna persona por el daño que me ha causado a mí o a gente a la que quiero."],3: ["Deseo el mal a alguien (que le pase algo malo, que sufra, que fracase).","Me niego a perdonar a alguna persona por el daño que me ha causado a mí o a gente a la que quiero.","Consiento en mi corazón el deseo de cualquier tipo de mal a alguna persona que conozco."]},
+  "Pereza": {0: [],1: ["Me dejo llevar por el desorden, la procastinación o la chapuza en mis trabajos."],2: ["Retraso habitualmente las cosas que más me cuestan. Termino mal lo que hago sobretodo cuando estoy cansado.","He pospuesto cosas importante porque no me apetecía perdiendo, sin embargo, el tiempo en cosas que me gustan pero que no eran necesarias."],3: ["He sido flojo o perezoso para levantarme, hacer mis tareas o cumplir mis obligaciones.","He pospuesto cosas importantes (estudio, trabajo, ayudar en casa, rezar) diciendo -luego lo hago-. He perdido el tiempo con cosas inútiles.","Busco hacer lo que más me gusta o... (etc)"]},
+  "Mentira": {0: [],1: ["He dicho alguna mentira o no he sido suficientemnte transparente."],2: ["He engañado de cualquier forma a otros para hacerles creer algo que no es verdad.","He fingido con palabras, obras o gestos con falsedad."],3: ["He dicho mentiras. He engañado de cualquier forma.","He esquivado el decir la verdad cuando tenía que hacerlo porque era incómoda.","He dicho falso testimonio en cuestiones legales o profesionales. He copiado en exámenes."]},
+  "Aborto": {0: [],1: ["He abortado o tomado medicamentos abortivos (DIU, píldora del día después...). He colaborado de cualquier forma en el crimen del aborto."],2: ["He abortado o tomado medicamentos abortivos (DIU, píldora del día después...).","He colaborado de cualquier forma en el crimen del aborto."],3: ["He tomado medicamentos abortivos (DIU, píldora del día después, etc...).","He abortado.","He colaborado de cualquier forma en el crimen del aborto."]},
+  "Desobediencia": {0: [],1: ["He desobedecido a quienes están en una posición de autoridad sobre mí."],2: ["He desobedecido a mis padres, profesores, o personas que están sobre mí.","He generado mal ambiente o actitudes de desobediencia ante aquellos que ejercen la autoridad de manera legítima y correcta sobre mi o los míos."],3: ["He desobedecido a mis padres, profesores, o personas que están sobre mí.","He generado mal ambiente o actitudes de desobediencia ante aquellos que ejercen la autoridad de manera legítima y correcta sobre mi o los míos.","He faltado al respeto que debo a padres, profesores, sacerdotes/obispos, responsables políticos o cualquiera de los que tienen una posición de autoridad sobre mí."]},
+  "Robo": {0: [],1: ["He robado algo o he maltratado las cosas que tengo o los medios que tengo a mi disposición."],2: ["Me he apropiado de lo que no es mío. He robado en tiendas, internet o de cualquier otro medio.","He maltratado las cosas que tengo o desaprovechado los medios que tengo a mi disposición."],3: ["Me he apropiado de lo que no es mío. He robado en tiendas, internet o de cualquier otro medio. He estafado al estado o he sido poco honrado en mi trabajo.","He maltratado las cosas que tengo perdiéndolas, estropeándolas, o de cualquier forma.","He desaprovechado los medios que tengo a mi disposición."]},
+  "Chisme": {0: [],1: ["He hablado de otros o criticado. He participado en conversaciones en las que se criticaba."],2: ["He criticado o hablado mal de alguien incluso siendo verdad lo que decía -aunque innecesario-.","He dado a entender cosas malas de otras personas. He exagerado sus defectos o atribuído hechos malos de los que no estoy seguro."],3: ["He criticado o hablado mal de alguien.","He calumniado o difamado a alguien dando a entender lo que no es o diciendo, directamente, cosas que no son verdad.","He participado en conversaciones en las que se habla mal de otras personas sin tratar de cortarlas o sin irme de esos ambientes."]},
+  "Blasfemia": {0: [],1: ["He dicho blasfemias o maltratado con palabras o mi actitud a Dios o sus cosas santas."],2: ["He dicho blasfemias o hecho burla de las cosas de Dios.","He menospreciado la Iglesia, los sacramentos, el Papa o los sacerdotes."],3: ["He dicho blasfemias.","He jurado en falso o de cualquier forma.","He menospreciado a la Iglesia, los sacramentos, el Papa, los sacerdotes." ]},
+  "Superstición": {0: [],1: ["Soy supersticioso/a de cualquier forma."],2: ["Consulto horóscopos, cartas o cosas de suerte.","Creo en la mala suerte o amuletos."],3: ["Consulto horóscopos, cartas o prácticas mágicas.","Tengo amuletos o atribuyo poder mágico a cosas religiosas." ]},
+  "Drogas": {0: [],1: ["He consumido drogas o sustancias adictivas."],2: ["He consumido drogas sintéticas o naturales.","He facilitado drogas a otros."],3: ["He consumido drogas.", "He facilitado drogas a otros.", "He abusado de alcohol, tabaco u otras sustancias." ]},
+  "Embriaguez": {0: [],1: ["He consumido alcohol en exceso."],2: ["Me he emborrachado.","He conducido bajo efectos del alcohol."],3: ["Me he emborrachado o he consumido alcohol en exceso.","He puesto en riesgo mi vida o la de otros por alcohol.", "He engañado a otros para hacerles creer que no estoy bebiendo." ]},
+  "Egoísmo": {0: [],1: ["Me encierro en mí mismo ignorando a los demás."],2: ["Solo busco mi beneficio en mis relaciones.","Soy egoísta en mis decisiones."],3: ["Vivo centrado en mí mismo ignorando a los demás.","Manipulo o uso a otros para mi beneficio.", "Soy egoísta en mis decisiones."]},
+  "Avaricia": {0: [],1: ["Soy avaricioso."],2: ["Me importa demasiado el dinero.","No ayudo pudiendo hacerlo."],3: ["Amo el dinero más que a los demás.","No comparto con los necesitados.", "Busco ganar dinero a costa de lo que sea, incluso de hacer daño a otros o a mí mismo, o mis principios y creencias."]},
+  "Sin rezar": {0: [],1: ["Rezo poco o con desgana."],2: ["He dejado de rezar con frecuencia.","Mi relación con Dios es fría."],3: ["Retraso la oración o dejo de rezar.", "Dirías que te has olvidado de Dios.", "He abandonado mi vida espiritual." ]},
+  "Sin Misa": {0: [],1: ["He faltado a Misa o llegado tarde.", "He comulgado alguna vez sin haberme confesado antes."],2: ["No voy a Misa los domingos.", "He faltado a Misa o llegado tarde.", "He comulgado alguna vez sin haberme confesado antes."],3: ["He dejado la Misa dominical.", "He faltado a Misa o llegado tarde.", "He comulgado alguna vez sin haberme confesado antes.", "He sido causante de que otros tampoco vayan a la Santa Misa."]},
+  "Bullying": {0: [],1: ["He tratado mal a compañeros, amigos o conocidos."],2: ["He humillado a alguien en la escuela, universidad o trabajo.", "He hecho críticas a las espaldas de otras personas deteriorando su imagen y perjudicandoles en su vida social."],3: ["He hecho bullying o dejado de ayudar a quien lo sufría.", "He humillado a alguien en la escuela, universidad o trabajo.", "He hecho críticas a las espaldas de otras personas deteriorando su imagen y perjudicandoles en su vida social."]},
+  "Sexo": {0: [],1: ["He tenido conductas sexuales inapropiadas."],2: ["He tenido relaciones sexuales fuera del matrimonio.", "He caído en el pecado de la masturbación."],3: ["He tenido relaciones sexuales sin estar casado.", "He sido infiel en mi matrimonio.", "He incitado a otras personas a comportamientos impuros." ]},
+  "Xenofobia": {0: [],1: ["He tenido pensamientos xenófobos."],2: ["He tenido pensamientos xenófobos.", "He discriminado por origen, raza, religión, etc."],3: ["He tenido pensamientos xenófobos.", "He discriminado por origen, raza, religión, etc.", "He hecho comentarios o cometido actos racistas."]},
+  "Contestaciones": {0: [],1: ["He contestado mal a quien tiene autoridad sobre mí."],2: ["He contestado mal a quien tiene autoridad sobre mí.", "He sido irrespetuoso."],3: ["He contestado mal a quien tiene autoridad sobre mí.", "He sido irrespetuoso.", "He respondido con violencia o soberbia o de malas maneras."]},
+  "Materialista": {0: [],1: ["He hecho gastos excesivos."],2: ["He hecho gastos excesivos.", "Compro cosas innecesarias."],3: ["He hecho gastos excesivos.", "Compro cosas innecesarias.", "Soy consumista extremo."]}
+};
+
+function iniciarChat() {
+    document.querySelector(".start").style.display = "none";
+    document.getElementById("progress-container").style.display = "block";
+
+    const raw = localStorage.getItem("resultados");
+    if (!raw) return alert("Primero completa el examen.");
+
+    const data = JSON.parse(raw);
+    generarPreguntas(data);
+    lanzarPreguntas();
+    actualizarProgreso();
+}
+
+function generarPreguntas(data) {
+    preguntas = [];
+    index = 0;
+    respuestasUsuario = {};
+
+    data.forEach(item => {
+        const palabra = item.word;
+        const valor = item.value;
+
+        if (preguntasMap[palabra] && preguntasMap[palabra][valor]) {
+            preguntas.push(...preguntasMap[palabra][valor]);
+        }
+    });
+}
+
+function lanzarPreguntas() {
+    if (index >= preguntas.length) {
+        guardarRespuestasBackend();
+        return;
+    }
+    mostrarPregunta(preguntas[index]);
+}
+
+function mostrarPregunta(texto) {
+    const chat = document.getElementById("chat");
+
+    const msg = document.createElement("div");
+    msg.className = "message bot";
+
+    const text = document.createElement("div");
+    text.textContent = texto;
+
+    const btns = document.createElement("div");
+    btns.className = "buttons";
+
+    ["Muchas veces.","Algunas veces.","Pocas veces.", "Nunca."].forEach(val => {
+        const b = document.createElement("button");
+        b.textContent = val;
+
+        b.onclick = () => {
+            respuestasUsuario[texto] = val;
+
+            btns.querySelectorAll("button").forEach(btn => btn.classList.remove("selected"));
+            b.classList.add("selected");
+
+            btns.querySelectorAll("button").forEach(btn => btn.disabled = true);
+
+            index++;
+            actualizarProgreso();
+            lanzarPreguntas();
+        };
+
+        btns.appendChild(b);
+    });
+
+    msg.appendChild(text);
+    msg.appendChild(btns);
+    chat.appendChild(msg);
+    chat.scrollTop = chat.scrollHeight;
+}
+
+function actualizarProgreso() {
+    const progress = document.getElementById("progress-bar");
+    const porcentaje = ((index) / preguntas.length) * 100;
+    progress.style.width = porcentaje + "%";
+}
+
+function guardarRespuestasBackend() {
+    let textoFinal = "";
+
+    Object.entries(respuestasUsuario).forEach(([pregunta, valor]) => {
+        if (valor !== "Nunca.") {
+            textoFinal += "• " + valor + " " + pregunta + "\n";
+        }
+    });
+
+    localStorage.setItem("respuestasUsuario", textoFinal.trim());
+
+    const chat = document.getElementById("chat");
+
+    const msg = document.createElement("div");
+    msg.className = "message bot";
+    msg.innerHTML = `
+        <strong>¡Respuestas guardadas correctamente!</strong><br><br>
+        Ya puedes continuar.
+    `;
+    chat.appendChild(msg);
+
+    const extraContainer = document.createElement("div");
+    extraContainer.className = "extra-texto-container";
+
+    const label = document.createElement("label");
+    label.textContent = "¿Quieres añadir algo más a tu examen?";
+
+    const textarea = document.createElement("textarea");
+    textarea.id = "textoAdicional";
+
+    extraContainer.appendChild(label);
+    extraContainer.appendChild(textarea);
+    chat.appendChild(extraContainer);
+
+    const confesionContainer = document.createElement("div");
+    confesionContainer.className = "extra-texto-container";
+    confesionContainer.innerHTML = `
+        <label>Una última cosa: ¿hace cuánto que no te confiesas?</label>
+        <div style="display:flex; gap:10px; align-items:center; margin-top:8px;">
+            <select id="tiempoNumero" style="padding:8px; border-radius:8px; border:1px solid #ccc; font-size:1rem;">
+                ${Array.from({length:40}, (_,i) => `<option value="${i+1}">${i+1}</option>`).join('')}
+            </select>
+            <select id="tiempoUnidad" style="padding:8px; border-radius:8px; border:1px solid #ccc; font-size:1rem;">
+                <option value="días">días</option>
+                <option value="semanas">semanas</option>
+                <option value="meses">meses</option>
+                <option value="años" selected>años</option>
+            </select>
+        </div>
+    `;
+    chat.appendChild(confesionContainer);
+
+    const btn = document.createElement("button");
+    btn.className = "final-btn";
+    btn.textContent = "VOY A CONFESARME";
+    btn.onclick = () => {
+        const textoExtra = document.getElementById("textoAdicional").value.trim();
+        localStorage.setItem("textoAdicional", textoExtra);
+
+        const numero = document.getElementById("tiempoNumero").value;
+        const unidad = document.getElementById("tiempoUnidad").value;
+        localStorage.setItem("tiempoSinConfesarse", `${numero} ${unidad}`);
+
+        window.location.href = "/4-dos-cosas/";
+    };
+    chat.appendChild(btn);
+
+    const copyBtn = document.createElement("button");
+    copyBtn.className = "copy-btn";
+    copyBtn.textContent = "Copiar respuestas en el portapapeles";
+    copyBtn.onclick = () => {
+        const respuestas = localStorage.getItem("respuestasUsuario") || "";
+        if (!respuestas) {
+            alert("No hay respuestas guardadas para copiar.");
+            return;
+        }
+        navigator.clipboard.writeText(respuestas).then(() => {
+            copyBtn.textContent = "¡Copiado!";
+            setTimeout(() => {
+                copyBtn.textContent = "Copiar respuestas en el portapapeles";
+            }, 2000);
+        }).catch(() => {
+            const el = document.createElement("textarea");
+            el.value = respuestas;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand("copy");
+            document.body.removeChild(el);
+            copyBtn.textContent = "¡Copiado!";
+            setTimeout(() => {
+                copyBtn.textContent = "Copiar respuestas en el portapapeles";
+            }, 2000);
+        });
+    };
+    chat.appendChild(copyBtn);
+
+    chat.scrollTop = chat.scrollHeight;
+}
+</script>
+</div>
+</main>
+<footer class="yc-pie">yomeconfieso.es · <a href="/0-dudas/">Dudas</a> · <a href="/contacto/">Contacto</a></footer>
+</body>
+</html>

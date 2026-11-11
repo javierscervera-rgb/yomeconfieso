@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dos cosas antes de confesarte · yomeconfieso</title>
+<meta name="description" content="Antes de confesarte.">
+<link rel="canonical" href="https://www.yomeconfieso.es/4-dos-cosas/">
+<meta property="og:title" content="Dos cosas antes de confesarte · yomeconfieso">
+<meta property="og:description" content="Antes de confesarte.">
+<meta property="og:image" content="https://www.yomeconfieso.es/img/abrazo.jpg">
+<meta property="og:locale" content="es_ES">
+<link rel="icon" href="/favicon.png">
+<link rel="apple-touch-icon" href="/img/icono-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/estilo.css">
+</head>
+<body class="yc">
+<header class="yc-cabecera"><a class="yc-marca" href="/" aria-label="Inicio"><img src="/img/logo.png" alt="yo me confieso"></a><nav class="yc-menu"><a href="/">Inicio</a><a href="/0-dudas/">Dudas</a><a href="/contacto/">Contacto</a></nav></header>
+<main class="yc-principal">
+<header class="yc-titular"><h1>dos cosas antes de confesarte</h1></header>
+<div class="pagina">
+<style>
+.pagina .story {
+  max-width:700px;
+  margin:0 auto;
+  padding:20px 0 10px 0;
+}
+.pagina .story p {
+  max-width:680px;
+  margin:28px auto;
+  padding:0 14px;
+  text-align:center;
+  font-size:1.25rem;
+  line-height:1.6;
+  opacity:0;
+  transform:translateY(40px);
+  transition:opacity 1.2s ease, transform 1.2s ease;
+}
+.pagina .story p:first-child { margin-top:10px; }
+.pagina .story p.visible { opacity:1; transform:translateY(0); }
+/* BOTONES */
+.pagina .buttons {
+  text-align:center;
+  color:White;
+  margin:50px auto 80px auto;
+  opacity:0;
+  transition:opacity .8s ease-in;
+}
+.pagina .buttons.visible { opacity:1; }
+.pagina .btn {
+  display:block;
+  width:80%;
+  max-width:420px;
+  margin:18px auto;
+  background-color: rgb(89,193,192);
+  text-decoration:none;
+  padding:14px 28px;
+  font-size:16px;
+  font-weight:600;
+  text-transform:uppercase;
+  border-radius:6px;
+  cursor:pointer;
+  transition:all .3s ease;
+}
+/* FIX: asegurar color negro en todos los estados del enlace */
+.pagina .btn:link, .pagina .btn:visited, .pagina .btn:hover, .pagina .btn:active {
+  color:#000;
+}
+.pagina .btn:hover {
+  transform:translateY(-1px);
+  box-shadow:0 4px 12px rgba(0,0,0,0.2);
+}
+.pagina .btn:active {
+  transform:translateY(0);
+  box-shadow:0 2px 6px rgba(0,0,0,0.2);
+}
+
+</style>
+
+<div class="story">
+<p>¿Cómo te has quedado después de contestar todas las preguntas? El examen de conciencia puede ser un poco durillo...</p>
+<p>Lo cierto es que el pecado en sí mismo es una realidad dura. Decir que NO a Dios y comenzar un camino de autodestrucción y dolor para los tuyos.</p>
+<p>Por eso merece la pena detenernos un momento a considerar, con dolor, lo que hemos hecho.</p>
+<p>Piénsalo durante unos segundos, ¿quieres?</p>
+<p>Asegúrate, antes de continuar, que estás verdaderamente arrepentido y que pondrás los medios necesarios para que no se repita.</p>
+<p>¿Ya?</p>
+<p>Pues ahora puedes continuar.</p>
+</div>
+
+<div class="buttons" id="buttons">
+  <a class="btn" href="/5-ayudas/">
+    AYUDAS ANTES DE LA CONFESIÓN
+  </a>
+
+  <a class="btn" href="/6-paso-a-paso/">
+    ESTOY PREPARADO
+  </a>
+</div>
+
+<script>
+const paragraphs=document.querySelectorAll('.story p');
+const buttons=document.getElementById('buttons');
+
+const observer=new IntersectionObserver(entries=>{
+ entries.forEach(entry=>{
+  if(entry.isIntersecting){
+   entry.target.classList.add("visible");
+   if(entry.target===paragraphs[paragraphs.length-1])
+     setTimeout(()=>buttons.classList.add('visible'),800);
+  }
+ });
+},{threshold:0,rootMargin:"0px 0px -15% 0px"});
+
+paragraphs.forEach(p=>observer.observe(p));
+</script>
+</div>
+</main>
+<footer class="yc-pie">yomeconfieso.es · <a href="/0-dudas/">Dudas</a> · <a href="/contacto/">Contacto</a></footer>
+</body>
+</html>

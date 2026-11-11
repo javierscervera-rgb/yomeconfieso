@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La confesión paso a paso · yomeconfieso</title>
+<meta name="description" content="Guía para el momento de la confesión.">
+<link rel="canonical" href="https://www.yomeconfieso.es/6-paso-a-paso/">
+<meta property="og:title" content="La confesión paso a paso · yomeconfieso">
+<meta property="og:description" content="Guía para el momento de la confesión.">
+<meta property="og:image" content="https://www.yomeconfieso.es/img/abrazo.jpg">
+<meta property="og:locale" content="es_ES">
+<link rel="icon" href="/favicon.png">
+<link rel="apple-touch-icon" href="/img/icono-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/estilo.css">
+</head>
+<body class="yc">
+<header class="yc-cabecera"><a class="yc-marca" href="/" aria-label="Inicio"><img src="/img/logo.png" alt="yo me confieso"></a><nav class="yc-menu"><a href="/">Inicio</a><a href="/0-dudas/">Dudas</a><a href="/contacto/">Contacto</a></nav></header>
+<main class="yc-principal">
+<header class="yc-titular"><h1>LA CONFESIÓN PASO A PASO</h1></header>
+<div class="yc-texto yc-aviso"><p style="text-align:center;">Esta pantalla <strong>NO SUSTITUYE LA CONFESIÓN</strong>, al contrario,&nbsp;<br>es una<strong> guía detallada para el momento en vayas a confesarte.</strong></p></div>
+<div class="yc-texto"><p>El sacramento de la confesión se recibe, ya lo sabes, <strong>delante de un sacerdote católico</strong>, es así como lo ha querido el Señor. Si no sabes dónde puedes confesarte puedes buscar las iglesias cercansa pulsando <a href="/5-ayudas/">AQUÍ</a> y luego regresar. También puedes ver el diálogo para la confesión a continuación pero pero te ayudará, especialmente, tenerla en la mano cuando estés delante del sacerdote y vayas a confesarte. Te iré diciendo cómo hacerlo sin dudas.</p></div>
+<div class="pagina">
+<style>
+.pagina 500&display=swap');
+       
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: transparent;
+        }
+.pagina .chat-body {
+            margin: 0 auto;
+            padding: 15px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            background: transparent;
+            min-height: 100vh;
+        }
+.pagina .message-wrapper {
+            display: flex;
+            animation: fadeIn 0.2s ease forwards;
+        }
+.pagina .right-wrapper {
+            justify-content: flex-end;
+        }
+.pagina .bubble {
+            max-width: 95%;
+            padding: 10px 15px;
+            border-radius: 22px;
+            position: relative;
+            box-shadow: 0 3px 10px -2px rgb(0 0 0 / 0.1);
+            line-height: 1.6;
+            font-size: 1.05rem;
+            white-space: pre-line;
+        }
+.pagina .left-bubble {
+            background: #16a34a;
+            color: white;
+            border-bottom-left-radius: 6px;
+        }
+.pagina .right-bubble {
+            background: white;
+            color: #111827;
+            border-bottom-right-radius: 6px;
+        }
+.pagina .clarification {
+            background: transparent;
+            color: #374151;
+            font-style: italic;
+            font-size: 1rem;
+            text-align: center;
+            padding: 6px 0;
+            margin: 10px auto;
+            max-width: 95%;
+            line-height: 1.4;
+        }
+.pagina .continue-btn {
+            background: linear-gradient(90deg, #15803d, #16a34a);
+            color: white;
+            font-weight: 600;
+            padding: 13px 32px;
+            border-radius: 9999px;
+            box-shadow: 0 6px 12px -3px rgb(22 163 74 / 0.4);
+            transition: all 0.2s ease;
+            margin-top: 8px;
+            align-self: center;
+        }
+.pagina .continue-btn:hover {
+            transform: translateY(-2px);
+        }
+@keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+    
+.pagina .continue-btn { border: none; cursor: pointer; font-size: 1.125rem; }
+.pagina .text-green-700 { color: #15803d; }
+.pagina .font-medium { font-weight: 500; }
+.pagina .mt-6 { margin-top: 1.5rem; }
+.pagina .chat-body { min-height: 60vh; }
+</style>
+    <div id="chat-body" class="chat-body"></div>
+    <script>
+        const dialogSteps = [
+            { type: "clar", text: "Para comenzar puedes decir:" },
+            { type: "right", text: "Ave María purísima." },
+            { type: "clar", text: "A continuación el sacerdote te dice:" },
+            { type: "left", text: "Sin pecado concebida." },
+            { type: "clar", text: "También puede añadir dependiendo del sacerdote:" },
+            { type: "left", text: "El Señor esté en tu corazón para que te puedas arrepentir y confesar humildemente tus pecados." },
+            { type: "clar", text: "Si quieres puedes decir:" },
+            { type: "right", text: "Señor, tú lo sabes todo tú sabes que te quiero." },
+            { type: "clar", text: "Ahora dile cuánto hace que no te confiesas:" },
+           
+            // ← Paso modificado con el tiempo guardado en localStorage
+            { type: "right", text: "tiempoSinConfesarse" },
+           
+            { type: "clar", text: "Ya puedes ir diciendo con tranquilidad los pecados que has visto antes:" },
+            { type: "right", text: "dynamic" },
+            { type: "right", text: "dynamic_extra" },
+            { type: "clar", text: "Escucha atentamente los consejos que el sacerdote te da, quizá te pregunte alguna cosa, al final no te olvides de prestar atención a la penitencia para rezarla cuando termines. Finalmente recibe la absolución, el momento del perdón, que comienza con estas palabras:" },
+            { type: "left", text: "Dios, Padre misericordioso..." },
+            { type: "left", text: "Y yo te absuelvo de tus pecados..." },
+            { type: "right", text: "Amén" },
+            { type: "clar", text: "También puede añadir dependiendo del sacerdote:" },
+            { type: "left", text: "La pasión de Nuestro Señor Jesucristo, la intercesión de la Bienaventurada Virgen María y de todos los santos, el bien que hagas y el mal que puedas sufrir, te sirvan como remedio de tus pecados, aumento de gracia y premio de vida eterna." },
+            { type: "left", text: "Vete en paz." },
+            { type: "clar", text: "Ahora ya puedes salir. Dedica un momento a darle gracias a Dios por el perdón que has recibido y no te olvides de rezar la penitencia antes de marcharte." },
+        ];
+        let currentStepIndex = 0;
+        let currentContinueBtn = null;
+        const chatBody = document.getElementById('chat-body');
+        function limpiarTexto(texto) {
+            if (!texto) return "No hay texto guardado.";
+            let limpio = texto
+                .replace(/^\s*\[|\]\s*$/g, '')
+                .replace(/^\[|\]$/g, '')
+                .replace(/["']/g, '')
+                .replace(/[¿?]/g, '')
+                .replace(/[{}]/g, '')
+                .replace(/%/g, '%\n')
+                .trim();
+            const lineas = limpio.split('\n').map(linea => {
+                let l = linea.trim();
+                if (l.startsWith(',')) {
+                    l = l.substring(1).trim();
+                }
+                if (l.length > 0) {
+                    l = l;
+                }
+                return l;
+            });
+            return lineas.join('\n');
+        }
+        function agregarAclaracion(texto) {
+            const div = document.createElement('div');
+            div.className = 'clarification';
+            div.textContent = texto;
+            chatBody.appendChild(div);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+        function agregarBocadillo(tipo, texto) {
+            const wrapper = document.createElement('div');
+            wrapper.className = `message-wrapper ${tipo === 'right' ? 'right-wrapper' : ''}`;
+           
+            const bubble = document.createElement('div');
+            bubble.className = `bubble ${tipo === 'left' ? 'left-bubble' : 'right-bubble'}`;
+           
+            const htmlTexto = texto.replace(/\n/g, '<br>');
+            bubble.innerHTML = htmlTexto;
+           
+            wrapper.appendChild(bubble);
+            chatBody.appendChild(wrapper);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+        function mostrarBotonContinuar() {
+            if (currentContinueBtn) currentContinueBtn.remove();
+            currentContinueBtn = document.createElement('button');
+            currentContinueBtn.className = 'continue-btn text-lg';
+            currentContinueBtn.textContent = 'Continuar →';
+            currentContinueBtn.onclick = continuarDialogo;
+           
+            chatBody.appendChild(currentContinueBtn);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+        function ocultarBotonContinuar() {
+            if (currentContinueBtn) {
+                currentContinueBtn.remove();
+                currentContinueBtn = null;
+            }
+        }
+        function avanzarDialogo() {
+            if (currentStepIndex >= dialogSteps.length) return;
+           
+            const step = dialogSteps[currentStepIndex];
+            let textoFinal = step.text;
+            let saltarPaso = false;
+            // === LÓGICA PARA EL TIEMPO SIN CONFESARSE ===
+            if (step.text === "tiempoSinConfesarse") {
+                const tiempo = localStorage.getItem("tiempoSinConfesarse")?.trim();
+               
+                if (tiempo && tiempo.length > 0) {
+                    textoFinal = `Hace <strong>${tiempo}</strong> que no me confieso y en este tiempo…`;
+                } else {
+                    textoFinal = "Hace algún tiempo que no me confieso y en este tiempo…";
+                }
+            }
+            // === LÓGICA EXISTENTE ===
+            else if (step.text === "dynamic") {
+                const textoGuardado = localStorage.getItem("respuestasUsuario") || "No se encontró texto guardado.";
+                textoFinal = limpiarTexto(textoGuardado);
+            }
+            else if (step.text === "dynamic_extra") {
+                const textoExtra = localStorage.getItem("textoAdicional") || "";
+                if (textoExtra.trim() === "") {
+                    saltarPaso = true;
+                } else {
+                    textoFinal = textoExtra.trim();
+                }
+            }
+            currentStepIndex++;
+            if (saltarPaso) {
+                if (currentStepIndex < dialogSteps.length) {
+                    avanzarDialogo();
+                }
+                return;
+            }
+            if (step.type === 'clar') {
+                agregarAclaracion(textoFinal);
+            } else {
+                agregarBocadillo(step.type, textoFinal);
+            }
+           
+            if (step.type === 'right') {
+                mostrarBotonContinuar();
+            } else {
+                if (currentStepIndex < dialogSteps.length) {
+                    setTimeout(() => {
+                        avanzarDialogo();
+                    }, 1400);
+                } else {
+                    finalizarSimulacion();
+                }
+            }
+        }
+        window.continuarDialogo = function() {
+            ocultarBotonContinuar();
+            setTimeout(() => {
+                if (currentStepIndex < dialogSteps.length) {
+                    avanzarDialogo();
+                } else {
+                    finalizarSimulacion();
+                }
+            }, 400);
+        };
+        function finalizarSimulacion() {
+            const final = document.createElement('div');
+            final.className = 'clarification text-green-700 font-medium mt-6';
+            final.innerHTML = '¿Qué tal la experiencia? Si quieres terminamos juntos en la siguiente pantalla.';
+            chatBody.appendChild(final);
+
+            // Botón solicitado
+            const terminarBtn = document.createElement('button');
+            terminarBtn.className = 'continue-btn text-lg';
+            terminarBtn.textContent = 'TERMINAMOS JUNTOS';
+            terminarBtn.onclick = () => {
+                window.location.href = '/7-final/';
+            };
+            chatBody.appendChild(terminarBtn);
+
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+        window.onload = () => {
+            setTimeout(() => {
+                avanzarDialogo();
+            }, 400);
+        };
+    </script>
+</div>
+</main>
+<footer class="yc-pie">yomeconfieso.es · <a href="/0-dudas/">Dudas</a> · <a href="/contacto/">Contacto</a></footer>
+</body>
+</html>
