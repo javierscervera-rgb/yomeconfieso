@@ -560,3 +560,4 @@ body.yc .pagina .form-container h2 { display: none; }
 body.yc .pagina input, body.yc .pagina textarea { font-family: var(--sans); font-size: 16px; border-color: var(--borde); }
 body.yc .pagina input:focus, body.yc .pagina textarea:focus { border-color: var(--ciruela); }
 body.yc .pagina form button { min-height: 50px; font-size: 16px; }
+body.yc .pagina .chat-body { padding-left: 24px; padding-right: 24px; }
