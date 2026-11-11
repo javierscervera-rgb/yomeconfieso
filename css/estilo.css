@@ -23,7 +23,7 @@ body.yc {
   font-size: 17px;
   line-height: 1.6;
 }
-body.yc a { color: var(--ciruela); }
+:where(body.yc) a { color: var(--ciruela); }
 body.yc :focus-visible { outline: 3px solid var(--ciruela); outline-offset: 2px; }
 
 /* ===== Cuadro (franja en el móvil, columna en escritorio) ===== */
