@@ -579,7 +579,7 @@ body.yc .pagina .chat-body { padding-left: 24px; padding-right: 24px; }
   font-size: 14px; color: #8C84A0; transition: color .2s, transform .2s;
 }
 .cartas-pista.activa { color: var(--tinta); transform: translateY(-3px); }
-.cartas-mesa { position: relative; height: 330px; margin: 6px 0 4px; touch-action: none; }
+.cartas-mesa { position: relative; z-index: 3; height: 330px; margin: 6px 0 4px; touch-action: none; }
 .carta {
   position: absolute;
   top: 14px; left: 0; right: 0;

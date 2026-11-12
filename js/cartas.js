@@ -109,7 +109,7 @@
     var contador = el("span", { class: "cartas-contador" });
     var deshacer = el("button", { type: "button", class: "cartas-deshacer", text: "Deshacer" });
     var cabecera = el("div", { class: "cartas-cabecera" }, [contador, deshacer]);
-    var pista = el("p", { class: "cartas-pista", html: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg> Hacia arriba: <strong>nada</strong>, se la lleva el viento' });
+    var pista = el("p", { class: "cartas-pista", html: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg> <span>Hacia arriba: <strong>nada</strong>, se la lleva el viento</span>' });
     var mesa = el("div", { class: "cartas-mesa" });
     var cestasCaja = el("div", { class: "cartas-cestas" });
     var cestasEls = {};
