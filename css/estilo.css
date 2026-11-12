@@ -325,8 +325,6 @@ body.yc :focus-visible { outline: 3px solid var(--ciruela); outline-offset: 2px;
 .yc-examen span { display: flex; flex-direction: column; line-height: 1.25; }
 .yc-examen strong { font-size: 17px; }
 .yc-examen small { font-size: 13px; color: var(--gris); }
-.yc-examen.principal { background: var(--tinta); border-color: var(--tinta); color: #fff !important; }
-.yc-examen.principal small { color: rgba(255,255,255,.8); }
 .yc-enlace { text-align: center; font-weight: 600; padding: 10px; }
 .yc-nota { margin: 6px 0 0; text-align: center; font-size: 13px; color: var(--gris); }
 
@@ -423,8 +421,13 @@ body.yc .pagina .btn {
   box-sizing: border-box;
   font-size: 16px;
 }
-body.yc .pagina .btn + .btn { background: transparent; color: var(--tinta); border: 1px solid #CFC7DD; }
-body.yc .pagina .btn + .btn:hover { background: var(--lavanda); color: var(--tinta); }
+/* Cuando hay varios botones juntos, todos iguales */
+body.yc .pagina .btn,
+body.yc .pagina .final-btn,
+body.yc .pagina .copy-btn { background: #fff; color: var(--tinta); border: 1px solid #CFC7DD; }
+body.yc .pagina .btn:hover,
+body.yc .pagina .final-btn:hover,
+body.yc .pagina .copy-btn:hover { background: var(--lavanda); color: var(--tinta); }
 body.yc .pagina .contacto-final { text-align: left; padding: 0 24px; margin: 30px 0 40px; }
 body.yc .pagina .contacto-final a { color: var(--ciruela); }
 body.yc .pagina .share-buttons { justify-content: flex-start; padding: 0 24px; }
@@ -454,7 +457,6 @@ body.yc .pagina .boton {
   border-radius: 14px;
   box-shadow: none;
 }
-body.yc .pagina .boton:first-child { background: var(--tinta); color: #fff; border-color: var(--tinta); }
 body.yc .pagina .boton .titulo { font-family: var(--sans); font-size: 1.1rem; font-weight: 700; letter-spacing: .02em; }
 body.yc .pagina .boton.activo { background: var(--lavanda); color: var(--tinta); border-color: var(--ciruela); }
 body.yc .pagina .boton:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(42,34,56,.12); }
@@ -518,16 +520,44 @@ body.yc .pagina .message .buttons button.selected { background: var(--tinta); co
 body.yc .pagina #progress-container { height: 8px; background: #E4DEEC; }
 body.yc .pagina #progress-bar { background: var(--ciruela); }
 body.yc .pagina .extra-texto-container {
-  background: var(--lavanda);
+  background: #fff;
+  border: 1px solid #E4DEEC;
   border-radius: 18px;
+  padding: 18px 18px 16px;
+  margin-top: 0;
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
   font-size: 1.05rem;
+  box-shadow: 0 18px 40px rgba(42,34,56,.10);
+}
+body.yc .pagina .extra-texto-container label {
+  display: block;
+  margin-bottom: 12px;
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 1.45rem;
+  line-height: 1.2;
+  color: var(--tinta);
+}
+body.yc .pagina .extra-texto-container textarea {
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+  background: var(--papel);
+  padding: 12px;
+  font: 400 1rem var(--sans);
+  color: var(--tinta);
+}
+body.yc .pagina .extra-texto-container select {
+  min-height: 46px;
+  padding: 0 12px !important;
+  border: 1px solid var(--borde) !important;
+  border-radius: 12px !important;
+  background: var(--papel);
+  font: 600 1rem var(--sans) !important;
+  color: var(--tinta);
 }
 body.yc .pagina .final-btn, body.yc .pagina .copy-btn { min-height: 52px; margin-left: 0; margin-right: 0; width: 100%; }
-body.yc .pagina .copy-btn { background: transparent; color: var(--tinta); border: 1px solid #CFC7DD; }
-body.yc .pagina .copy-btn:hover { background: var(--lavanda); color: var(--tinta); }
 
 /* Ayudas */
 body.yc .pagina .accordion-item { border-bottom: none; margin: 0 24px 10px; }
@@ -692,8 +722,20 @@ body.eleccion-abierta { overflow: hidden; }
   transition: border-color .2s, transform .2s, box-shadow .2s;
 }
 .eleccion-opcion:hover { border-color: var(--ciruela); transform: translateY(-2px); box-shadow: 0 12px 26px rgba(42,34,56,.12); }
-.eleccion-opcion.recomendada { border-color: var(--tinta); }
 .eleccion-opcion svg { width: 100%; height: auto; display: block; margin-bottom: 4px; }
 .eleccion-opcion strong { font-size: 16px; }
 .eleccion-opcion span { font-size: 13px; line-height: 1.35; color: var(--gris); }
 @media (max-width: 360px) { .eleccion-opciones { grid-template-columns: 1fr; } }
+
+/* Parroquias cercanas */
+body.yc .pagina .parroquia-item { display: flex; flex-direction: column; gap: 6px; border: 1px solid #E4DEEC; box-shadow: none; }
+body.yc .pagina .parroquia-item .nombre { font-size: 1rem; font-weight: 700; color: var(--tinta); }
+body.yc .pagina .parroquia-item .distancia { font-size: .9rem; font-weight: 600; color: var(--ciruela); white-space: nowrap; margin-left: 10px; }
+body.yc .pagina .parroquia-dir { font-size: .9rem; color: var(--gris); line-height: 1.35; }
+body.yc .pagina .parroquia-ruta {
+  align-self: flex-start; margin-top: 4px; padding: 8px 16px; border-radius: 20px;
+  background: #fff; border: 1px solid #CFC7DD; color: var(--tinta); text-decoration: none; font-weight: 600; font-size: .95rem;
+}
+body.yc .pagina .parroquia-ruta:hover { background: var(--lavanda); }
+body.yc .pagina .parroquias-mensaje { margin: 6px 0; color: var(--gris); }
+body.yc .pagina .parroquias-nota { margin: 4px 0 0; font-size: .82rem; color: var(--gris); }

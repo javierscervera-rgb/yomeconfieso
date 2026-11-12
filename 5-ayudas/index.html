@@ -11,12 +11,13 @@
 <meta property="og:image" content="https://www.yomeconfieso.es/img/abrazo.jpg">
 <meta property="og:locale" content="es_ES">
 <meta name="theme-color" content="#2A2238">
+<script>if (location.protocol === "http:" && /yomeconfieso[.]es$/.test(location.hostname)) location.replace("https:" + location.href.slice(5));</script>
 <link rel="icon" href="../favicon.png">
 <link rel="apple-touch-icon" href="../img/icono-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../css/estilo.css?v=78f6da3a">
+<link rel="stylesheet" href="../css/estilo.css?v=a00aa6f4">
 </head>
 <body class="yc">
 <aside class="yc-cuadro">
@@ -184,106 +185,6 @@ tab3.addEventListener("change", () => {
   if (tab3.checked) listarParroquias(); 
 });
 
-let userLat, userLon;
-
-function calcularDistancia(lat1, lon1, lat2, lon2) {
-  const R = 6371000;
-  const toRad = x => x * Math.PI / 180;
-  const dLat = toRad(lat2 - lat1);
-  const dLon = toRad(lon2 - lon1);
-
-  const a = Math.sin(dLat/2)**2 +
-            Math.cos(toRad(lat1)) *
-            Math.cos(toRad(lat2)) *
-            Math.sin(dLon/2)**2;
-
-  return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
-}
-
-function listarParroquias() {
-  const container = document.getElementById("parroquias");
-  container.innerHTML = "📍 Buscando parroquias cercanas...";
-
-  if (!navigator.geolocation) {
-    container.innerHTML = "❌ Tu navegador no soporta geolocalización";
-    return;
-  }
-
-  navigator.geolocation.getCurrentPosition(
-    position => {
-      userLat = position.coords.latitude;
-      userLon = position.coords.longitude;
-
-      const query = `
-        [out:json];
-        (
-          node["amenity"="place_of_worship"]["religion"="christian"][denomination=catholic](around:10000,${userLat},${userLon});
-          way["amenity"="place_of_worship"]["religion"="christian"][denomination=catholic](around:10000,${userLat},${userLon});
-        );
-        out center;
-      `;
-
-      fetch("https://overpass-api.de/api/interpreter", {
-        method: "POST",
-        headers: { "Content-Type": "text/plain" },
-        body: query
-      })
-      .then(res => res.json())
-      .then(data => {
-        container.innerHTML = "";
-
-        if (!data.elements.length) {
-          container.innerHTML = "😕 No se encontraron parroquias cercanas";
-          return;
-        }
-
-        const parroquias = data.elements
-          .map(el => {
-            const lat = el.lat ?? el.center?.lat;
-            const lon = el.lon ?? el.center?.lon;
-            if (!lat || !lon) return null;
-
-            const nombre = el.tags?.name || "Parroquia";
-            const distancia = Math.round(calcularDistancia(userLat, userLon, lat, lon));
-
-            return { nombre, lat, lon, distancia };
-          })
-          .filter(p => p !== null)
-          .sort((a, b) => a.distancia - b.distancia)
-          .slice(0, 10);
-
-        parroquias.forEach(p => {
-          const div = document.createElement("div");
-          div.className = "parroquia-item";
-          div.innerHTML = `
-            <div class="parroquia-header">
-              <span class="nombre">${p.nombre}</span>
-              <span class="distancia">${p.distancia} m</span>
-            </div>
-            <button onclick="irAGoogleMaps(${p.lat}, ${p.lon})">
-              Cómo llegar
-            </button>`;
-          container.appendChild(div);
-        });
-      })
-      .catch(err => {
-        container.innerHTML = "❌ Error al cargar parroquias";
-        console.error(err);
-      });
-    },
-    error => {
-      container.innerHTML = "❌ Activa la ubicación para ver parroquias cercanas";
-      console.error(error);
-    }
-  );
-}
-
-function irAGoogleMaps(lat, lon) {
-  window.open(
-    `https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLon}&destination=${lat},${lon}`,
-    "_blank"
-  );
-}
 </script>
 </div>
 <div class="yc-texto"><p>¿Ya estás dispuesto? Pulsa el botón cuando estés en la Iglesia o junto al lugar y al sacerdote con el que te vas a confesar.&nbsp;</p></div>
@@ -291,5 +192,6 @@ function irAGoogleMaps(lat, lon) {
   </main>
   <footer class="yc-pie">Esta web te ayuda a prepararte. El perdón lo da el sacerdote en la confesión. · <a href="../0-dudas/">Dudas</a> · <a href="../contacto/">Contacto</a></footer>
 </div>
+<script src="../js/parroquias.js?v=4de284e1"></script>
 </body>
 </html>

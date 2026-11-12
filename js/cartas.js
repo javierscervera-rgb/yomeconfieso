@@ -356,8 +356,8 @@
     document.body.classList.add("eleccion-abierta");
     var previa = null;
     try { previa = localStorage.getItem("sistemaExamen"); } catch (e) {}
-    var foco = caja.querySelector('[data-sistema="' + (previa || "cartas") + '"]');
-    if (foco) { foco.classList.add("recomendada"); foco.focus(); }
+    caja.setAttribute("tabindex", "-1");
+    caja.focus();
   }
 
   function preparar() {

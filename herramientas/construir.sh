@@ -6,3 +6,4 @@ python3 herramientas/migrar.py
 python3 herramientas/mejoras_juego.py
 python3 herramientas/mejoras_chat.py
 python3 herramientas/mejoras_cartas.py
+python3 herramientas/mejoras_ayudas.py

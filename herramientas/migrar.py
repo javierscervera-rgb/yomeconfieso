@@ -189,6 +189,7 @@ def documento(slug, cuerpo, portada=False):
 <meta property="og:image" content="https://www.yomeconfieso.es/img/abrazo.jpg">
 <meta property="og:locale" content="es_ES">
 <meta name="theme-color" content="#2A2238">
+<script>if (location.protocol === "http:" && /yomeconfieso[.]es$/.test(location.hostname)) location.replace("https:" + location.href.slice(5));</script>
 <link rel="icon" href="/favicon.png">
 <link rel="apple-touch-icon" href="/img/icono-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -239,7 +240,7 @@ PORTADA = """<div class="yc-portada">
     <p class="yc-entradilla">Sin prisas, a tu ritmo. Un examen sencillo, unas preguntas para ti y el diálogo con el sacerdote en la palma de la mano.</p>
     <p class="yc-antetitulo yc-elige">Elige tu examen</p>
     <div class="yc-examenes">
-      <a class="yc-examen principal" href="/2-examen/"><span><strong>Adultos</strong><small>Más de 30 años</small></span>FLECHA</a>
+      <a class="yc-examen" href="/2-examen/"><span><strong>Adultos</strong><small>Más de 30 años</small></span>FLECHA</a>
       <a class="yc-examen" href="/2-examen-jovenes/"><span><strong>Jóvenes</strong><small>De 15 a 30 años</small></span>FLECHA</a>
       <a class="yc-examen" href="/2-examen-primaria/"><span><strong>Chicos y chicas</strong><small>De 10 a 15 años</small></span>FLECHA</a>
     </div>
