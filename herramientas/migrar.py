@@ -7,28 +7,30 @@ import re, os, sys
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 import hashlib
 VERSION_CSS = hashlib.md5(open(os.path.join(RAIZ, "css", "estilo.css"), "rb").read()).hexdigest()[:8]
+VERSION_COMUN = hashlib.md5(open(os.path.join(RAIZ, "js", "comun.js"), "rb").read()).hexdigest()[:8]
 ORIG = os.path.join(RAIZ, "original")
 
 PAGINAS = {
     # slug: (título <title>, descripción, ancha)
     "inicio": ("yomeconfieso · Tu guía para confesarte", "Tu guía paso a paso para el examen de conciencia y la confesión.", False),
-    "0-intro": ("El sacramento de la misericordia · yomeconfieso", "Qué es el sacramento de la Confesión.", False),
-    "0-dudas": ("Dudas sobre la Confesión · yomeconfieso", "Respuestas a las dudas más frecuentes sobre el sacramento de la Confesión.", False),
-    "1-prepara": ("Prepara tu confesión · yomeconfieso", "Vídeos y ayudas para preparar la Confesión.", False),
+    "saber-mas": ("Saber más sobre la confesión · yomeconfieso", "Qué es el sacramento de la Confesión, sus cinco partes, vídeos y dudas frecuentes.", False),
     "2-examen": ("Examen de conciencia para adultos · yomeconfieso", "Examen de conciencia interactivo para adultos.", True),
     "2-examen-jovenes": ("Examen de conciencia para jóvenes · yomeconfieso", "Examen de conciencia interactivo para jóvenes de 15 a 30 años.", True),
     "2-examen-primaria": ("Examen de conciencia para chicos/as · yomeconfieso", "Examen de conciencia interactivo para chicos y chicas de 10 a 15 años.", True),
     "3-preguntas": ("Preguntas del examen · yomeconfieso", "Preguntas del examen de conciencia.", False),
     "3-preguntas-jovenes": ("Preguntas del examen · yomeconfieso", "Preguntas del examen de conciencia para jóvenes.", False),
     "3-preguntas-primaria": ("Preguntas del examen · yomeconfieso", "Preguntas del examen de conciencia para chicos y chicas.", False),
-    "4-dos-cosas": ("Dos cosas antes de confesarte · yomeconfieso", "Antes de confesarte.", False),
+    "dolor": ("Dolor de los pecados · yomeconfieso", "Segunda parte de la confesión: el dolor de los pecados.", False),
+    "proposito": ("Propósito de la enmienda · yomeconfieso", "Tercera parte de la confesión: el propósito de la enmienda.", False),
     "5-ayudas": ("Ayudas antes de confesarte · yomeconfieso", "Oraciones, vídeo y parroquias cercanas.", False),
     "6-paso-a-paso": ("La confesión paso a paso · yomeconfieso", "Guía para el momento de la confesión.", False),
     "7-final": ("Terminando · yomeconfieso", "Después de la confesión.", False),
     "contacto": ("Contacto · yomeconfieso", "Escríbenos.", False),
 }
 
-MENU = [("Inicio", "/", "inicio"), ("Dudas", "/0-dudas/", "0-dudas"), ("Contacto", "/contacto/", "contacto")]
+# páginas antiguas que ahora redirigen
+REDIRECCIONES = {"0-intro": "/saber-mas/#que-es", "0-dudas": "/saber-mas/#dudas",
+                 "1-prepara": "/saber-mas/#videos", "4-dos-cosas": "/dolor/"}
 
 # ---------- CSS: prefijar todos los selectores con .pagina ----------
 def prefijar_css(css):
@@ -97,33 +99,46 @@ def trocear(slug):
         res.append((bloques[n], bloques[n + 1].strip()))
     return res
 
-PASOS = [  # (número, nombre, slug base)
-    (0, "Introducción", "0-intro"),
-    (1, "Prepara", "1-prepara"),
-    (2, "Examen", "2-examen"),
-    (3, "Preguntas", "3-preguntas"),
-    (4, "Arrepentimiento", "4-dos-cosas"),
-    (5, "Ayudas", "5-ayudas"),
-    (6, "Paso a paso", "6-paso-a-paso"),
-    (7, "Final", "7-final"),
+PARTES = [  # (número, nombre, [(slug base, subpaso)])
+    (1, "Examen de conciencia", [("2-examen", "Examen"), ("3-preguntas", "Preguntas")]),
+    (2, "Dolor de los pecados", [("dolor", None)]),
+    (3, "Propósito de la enmienda", [("proposito", None)]),
+    (4, "Decir los pecados al confesor", [("5-ayudas", "Antes de entrar"), ("6-paso-a-paso", "Paso a paso")]),
+    (5, "Cumplir la penitencia", [("7-final", None)]),
 ]
 
 TITULOS = {  # título, subtítulo
-    "0-intro": ("El sacramento de la misericordia", "¿Sabes qué es?"),
-    "0-dudas": ("Algunas dudas sobre la confesión", ""),
-    "1-prepara": ("Prepara tu confesión", ""),
+    "saber-mas": ("Saber más", "Qué es la confesión, sus cinco partes, vídeos y dudas"),
     "2-examen": ("Examen de conciencia", "Para adultos"),
     "2-examen-jovenes": ("Examen de conciencia", "Para jóvenes"),
     "2-examen-primaria": ("Examen de conciencia", "Para chicos y chicas"),
     "3-preguntas": ("Algunas preguntas preparadas para ti", ""),
     "3-preguntas-jovenes": ("Algunas preguntas para jóvenes como tú", ""),
     "3-preguntas-primaria": ("Algunas preguntas para chicos y chicas como tú", ""),
-    "4-dos-cosas": ("Dos cosas antes de confesarte", ""),
+    "dolor": ("Dolor de los pecados", ""),
+    "proposito": ("Propósito de la enmienda", ""),
     "5-ayudas": ("Algunas ayudas antes de confesarte", ""),
     "6-paso-a-paso": ("La confesión paso a paso", ""),
-    "7-final": ("Terminando…", ""),
+    "7-final": ("Cumplir la penitencia", "Terminando…"),
     "contacto": ("¿Quieres decirme algo?", ""),
 }
+
+VIDEOS = {  # homilías de la Novena (antes en «Prepara»)
+    "examen": ("El examen de conciencia", "8kwMIOBhx_Q"),
+    "dolor": ("El dolor de los pecados", "HL07-Zv__eM"),
+    "proposito": ("El propósito de la enmienda", "MfxZ74nGVFA"),
+    "decir": ("Decir los pecados al confesor", "6f6s4foZRpU"),
+    "penitencia": ("Cumplir la penitencia", "qKgrMTU_SRI"),
+}
+VIDEO_DE = {"2-examen": "examen", "2-examen-jovenes": "examen", "2-examen-primaria": "examen",
+            "dolor": "dolor", "proposito": "proposito", "6-paso-a-paso": "decir", "7-final": "penitencia"}
+
+def video_html(clave):
+    titulo, yt = VIDEOS[clave]
+    return (f'<details class="yc-video"><summary><span class="yc-video-icono" aria-hidden="true">▶</span>'
+            f'<span><small>Para profundizar</small>Homilía: «{titulo}»</span></summary>'
+            f'<div class="yc-video-marco"><iframe data-src="https://www.youtube.com/embed/{yt}" title="{titulo}" '
+            f'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div></details>')
 
 ICONO_FLECHA = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'
 
@@ -133,44 +148,60 @@ def variante(slug):
             return v
     return ""
 
-def paso_de(slug):
-    for n, nombre, base in PASOS:
-        if slug == base or slug.startswith(base + "-"):
-            return n, nombre
-    return None, None
+def parte_de(slug):
+    for n, nombre, subs in PARTES:
+        for i, (base, sub) in enumerate(subs):
+            if slug == base or slug.startswith(base + "-"):
+                return n, nombre, i, sub
+    return None, None, None, None
 
-def href_paso(base, slug):
+def href_base(base, slug):
     v = variante(slug)
     if base in ("2-examen", "3-preguntas") and v:
         return f"/{base}{v}/"
     return f"/{base}/"
 
 def camino_html(slug):
-    actual, _ = paso_de(slug)
-    items = []
-    for n, nombre, base in PASOS:
-        clase = ' class="activo" aria-current="page"' if n == actual else ""
-        items.append(f'<a href="{href_paso(base, slug)}"{clase}><span>{n}</span>{nombre}</a>')
+    actual, _, sub_actual, _ = parte_de(slug)
+    saber = ' class="yc-saber activo" aria-current="page"' if slug == "saber-mas" else ' class="yc-saber"'
+    items = [f'<a href="/saber-mas/"{saber}><span>i</span>Saber más</a><ol class="yc-partes-lista">']
+    for n, nombre, subs in PARTES:
+        estado = "activo" if n == actual else ("hecho" if actual and n < actual else "")
+        cur = ' aria-current="step"' if n == actual else ""
+        items.append(f'<li class="{estado}"><a href="{href_base(subs[0][0], slug)}" data-parte="{n}"{cur}><span>{n}</span>{nombre}</a>')
+        if n == actual and len(subs) > 1:
+            items.append('<ul>')
+            for i, (base, sub) in enumerate(subs):
+                c = ' class="activo"' if i == sub_actual else ""
+                items.append(f'<li{c}><a href="{href_base(base, slug)}">{sub}</a></li>')
+            items.append('</ul>')
+        items.append('</li>')
+    items.append('</ol>')
     return "".join(items)
 
-MENU_ENLACES = [("Inicio", "/"), ("Dudas", "/0-dudas/"), ("Contacto", "/contacto/")]
+MENU_ENLACES = [("Inicio", "/"), ("Saber más", "/saber-mas/"), ("Dudas", "/saber-mas/#dudas"), ("Contacto", "/contacto/")]
 
 def menu_html(slug):
-    activo = {"inicio": "/", "0-dudas": "/0-dudas/", "contacto": "/contacto/"}.get(slug)
+    activo = {"inicio": "/", "saber-mas": "/saber-mas/", "contacto": "/contacto/"}.get(slug)
     return "".join(
-        f'<a href="{h}"{" aria-current=\"page\"" if h == activo else ""}>{n}</a>'.replace('\\"', '"')
+        f'<a href="{h}"' + (' aria-current="page"' if h == activo else '') + f'>{n}</a>'
         for n, h in MENU_ENLACES)
 
 def cabecera_pagina(slug):
-    n, nombre = paso_de(slug)
+    n, nombre, i, sub = parte_de(slug)
     if n is not None:
-        barras = "".join(f'<span{" class=\"hecho\"" if i <= n else ""}></span>'.replace('\\"', '"') for i in range(8))
-        etiqueta = f'Paso {n} · {nombre}'
-        progreso = f'<div class="yc-progreso" aria-label="Paso {n} de 7"><div class="yc-barras">{barras}</div><span class="yc-etiqueta">{etiqueta}</span></div>'
+        pasos = []
+        for m, nom, _ in PARTES:
+            clase = "activo" if m == n else ("hecho" if m < n else "")
+            pasos.append(f'<li class="{clase}"><span class="yc-num">{m}</span><span class="yc-nom">{nom}</span></li>')
+        detalle = f" · {sub}" if sub else ""
+        progreso = (f'<nav class="yc-pasos" aria-label="Las cinco partes de la confesión"><ol>{"".join(pasos)}</ol></nav>'
+                    f'<p class="yc-etiqueta">Parte {n} de 5 · {nombre}{detalle}</p>')
     else:
-        progreso = f'<div class="yc-progreso"><span class="yc-etiqueta">{"Dudas frecuentes" if slug == "0-dudas" else "Contacto"}</span></div>'
-    titulo, sub = TITULOS[slug]
-    sub_html = f'<p class="yc-sub">{sub}</p>' if sub else ""
+        etiqueta = {"saber-mas": "Antes de empezar", "contacto": "Contacto"}.get(slug, "")
+        progreso = f'<p class="yc-etiqueta">{etiqueta}</p>'
+    titulo, sub_t = TITULOS[slug]
+    sub_html = f'<p class="yc-sub">{sub_t}</p>' if sub_t else ""
     return f'<header class="yc-titular">{progreso}<h1>{titulo}</h1>{sub_html}</header>'
 
 def documento(slug, cuerpo, portada=False):
@@ -201,6 +232,7 @@ def documento(slug, cuerpo, portada=False):
     if portada:
         return cabeza + f"""<body class="yc yc-inicio">
 {cuerpo}
+<script src="/js/comun.js?v={VERSION_COMUN}"></script>
 </body>
 </html>
 """
@@ -221,20 +253,21 @@ def documento(slug, cuerpo, portada=False):
 {cabecera_pagina(slug)}
 {cuerpo}
   </main>
-  <footer class="yc-pie">Esta web te ayuda a prepararte. El perdón lo da el sacerdote en la confesión. · <a href="/0-dudas/">Dudas</a> · <a href="/contacto/">Contacto</a></footer>
+  <footer class="yc-pie">Esta web te ayuda a prepararte. El perdón lo da el sacerdote en la confesión. · <a href="/saber-mas/#dudas">Dudas</a> · <a href="/contacto/">Contacto</a></footer>
 </div>
+<script src="/js/comun.js?v={VERSION_COMUN}"></script>
 </body>
 </html>
 """
 
 PORTADA = """<div class="yc-portada">
   <div class="yc-portada-cuadro">
-    <nav class="yc-menu yc-menu-claro" aria-label="Menú"><a href="/0-intro/">Qué es la confesión</a><a href="/0-dudas/">Dudas</a><a href="/contacto/">Contacto</a></nav>
+    <nav class="yc-menu yc-menu-claro" aria-label="Menú"><a href="/saber-mas/">Saber más</a><a href="/saber-mas/#dudas">Dudas</a><a href="/contacto/">Contacto</a></nav>
     <h1><img src="/img/logo.png" alt="Yo me confieso"></h1>
     <p class="yc-cita">«Es un encuentro vivo de amor y sanación que manifiesta de manera palpable la ternura infinita del Corazón de Jesús.»</p>
   </div>
   <main class="yc-portada-texto">
-    <nav class="yc-menu yc-menu-portada" aria-label="Menú"><a href="/0-intro/">Qué es la confesión</a><a href="/0-dudas/">Dudas</a><a href="/contacto/">Contacto</a></nav>
+    <nav class="yc-menu yc-menu-portada" aria-label="Menú"><a href="/saber-mas/">Saber más</a><a href="/saber-mas/#dudas">Dudas</a><a href="/contacto/">Contacto</a></nav>
     <p class="yc-antetitulo">Examen de conciencia y confesión</p>
     <p class="yc-lema">Tu guía paso a paso para el examen de conciencia y la confesión</p>
     <p class="yc-entradilla">Sin prisas, a tu ritmo. Un examen sencillo, unas preguntas para ti y el diálogo con el sacerdote en la palma de la mano.</p>
@@ -244,7 +277,17 @@ PORTADA = """<div class="yc-portada">
       <a class="yc-examen" href="/2-examen-jovenes/"><span><strong>Jóvenes</strong><small>De 15 a 30 años</small></span>FLECHA</a>
       <a class="yc-examen" href="/2-examen-primaria/"><span><strong>Chicos y chicas</strong><small>De 10 a 15 años</small></span>FLECHA</a>
     </div>
-    <a class="yc-enlace" href="/0-intro/">¿Qué es la confesión? Empieza por aquí</a>
+    <a class="yc-enlace" href="/saber-mas/">Saber más sobre la confesión</a>
+    <div class="yc-cinco">
+      <p class="yc-antetitulo">El camino, en cinco partes</p>
+      <ol>
+        <li><span>1</span>Examen de conciencia</li>
+        <li><span>2</span>Dolor de los pecados</li>
+        <li><span>3</span>Propósito de la enmienda</li>
+        <li><span>4</span>Decir los pecados al confesor</li>
+        <li><span>5</span>Cumplir la penitencia</li>
+      </ol>
+    </div>
     <p class="yc-nota">Esta web te ayuda a prepararte. El perdón lo da el sacerdote en la confesión.</p>
   </main>
 </div>""".replace("FLECHA", ICONO_FLECHA)
@@ -340,16 +383,21 @@ def construir(slug):
         partes.append(f'<div class="pagina{" ancha" if ancha else ""}">\n{codigo}\n</div>')
     for t in textos_despues:
         partes.append(f'<div class="yc-texto">{urls(t)}</div>')
+    if slug == "7-final":
+        partes.append(MI_PROPOSITO)
+    if slug in VIDEO_DE:
+        partes.append(video_html(VIDEO_DE[slug]))
     if slug == "5-ayudas":
         partes.append('<a class="yc-boton" href="/6-paso-a-paso/">Estoy preparado ' + ICONO_FLECHA + '</a>')
-    if slug == "0-dudas":
-        partes.append('<a class="yc-boton secundario" href="/">Volver al inicio</a>')
-    html = documento(slug, "\n".join(partes), portada=(slug == "inicio"))
+    escribir(slug, documento(slug, "\n".join(partes), portada=(slug == "inicio")))
+
+def escribir(slug, html):
     if slug.startswith("2-examen"):
         for viejo, nuevo in [("#c0392b", "#9E3B52"), ("#e67e22", "#C7843A"), ("#27ae60", "#5E8F6E"),
                              ("ctx.fillStyle   = '#ecf0f1'", "ctx.fillStyle   = '#ECE8F3'"),
                              ("ctx.fillStyle    = '#2c3e50'", "ctx.fillStyle    = '#2A2238'")]:
             html = html.replace(viejo, nuevo)
+    html = html.replace("/4-dos-cosas/", "/dolor/").replace("/4-dos-cosas", "/dolor/")
     for mal, bien in [("te confesaros", "te confesaste"), ("cercansa", "cercanas"), ("pero pero", "pero"), ("momento en vayas", "momento en que vayas")]:
         html = html.replace(mal, bien)
     # rutas relativas: funcionan igual en el dominio propio y en la vista previa de github.io
@@ -360,6 +408,105 @@ def construir(slug):
     open(ruta, "w", encoding="utf-8").write(html)
     print("ok", slug, len(html))
 
+# ---------- páginas nuevas ----------
+MI_PROPOSITO = """<div class="yc-texto yc-mi-proposito" id="mi-proposito-caja" hidden>
+  <div class="yc-tarjeta"><p class="yc-tarjeta-titulo">Tu propósito</p><p id="mi-proposito"></p></div>
+</div>"""
+
+def parrafos_story(slug):
+    txt = open(os.path.join(ORIG, slug + ".html"), encoding="utf-8").read()
+    story = re.search(r'<div class="story">(.*?)</div>', txt, re.S).group(1)
+    return [re.sub(r"\s+", " ", re.sub(r"&nbsp;", " ", p)).strip() for p in re.findall(r"<p[^>]*>(.*?)</p>", story, re.S)]
+
+def codigo_de(slug):
+    for tipo, contenido in trocear(slug):
+        if tipo == "CODE":
+            return urls(arreglos(slug, limpiar_codigo(contenido)))
+    return ""
+
+def construir_saber_mas():
+    intro = parrafos_story("0-intro")
+    intro_html = "".join(f"<p>{p}</p>" for p in intro if "Recibid el Espíritu Santo" not in p)
+    cita = next(p for p in intro if "Recibid el Espíritu Santo" in p)
+    m = re.search(r'"(Recibid.*?)"\s*\((Jn [^)]*)\)', cita)
+    cita_html = f'<p>{cita.split(":")[0]}:</p><blockquote class="yc-cita-biblica">«{m.group(1)}»<cite>{m.group(2)}</cite></blockquote>' if m else f"<p>{cita}</p>"
+    partes_html = "".join(
+        f'<li><span class="yc-num">{n}</span><div><strong>{nombre}</strong><p>{desc}</p></div></li>'
+        for n, nombre, desc in [
+            (1, "Examen de conciencia", "Mirar con calma tu vida a la luz de Dios y reconocer tus pecados."),
+            (2, "Dolor de los pecados", "Arrepentirte de corazón por haber ofendido a Dios."),
+            (3, "Propósito de la enmienda", "Decidir poner los medios para no volver a caer."),
+            (4, "Decir los pecados al confesor", "Confesarlos con sencillez al sacerdote y recibir la absolución."),
+            (5, "Cumplir la penitencia", "Rezar o hacer lo que el sacerdote te indique."),
+        ])
+    cuerpo = f"""<nav class="yc-indice" aria-label="En esta página">
+  <a href="#que-es">¿Qué es?</a><a href="#partes">Las cinco partes</a><a href="#dudas">Dudas</a><a href="#videos">Vídeos</a>
+</nav>
+<section class="yc-seccion" id="que-es">
+  <div class="yc-texto"><h2>El sacramento de la misericordia</h2>{intro_html.split("</p>", 1)[0]}</p>{cita_html}{intro_html.split("</p>", 1)[1]}</div>
+</section>
+<section class="yc-seccion" id="partes">
+  <div class="yc-texto"><h2>Las cinco partes de la confesión</h2>
+  <p>La web te acompaña en cada una de ellas, en este orden:</p>
+  <ol class="yc-lista-partes">{partes_html}</ol></div>
+</section>
+<section class="yc-seccion" id="dudas">
+  <div class="yc-texto"><h2>Dudas frecuentes</h2><p>Las preguntas que más nos llegan por correo, agrupadas por temas.</p></div>
+  <div class="pagina">
+{codigo_de("0-dudas")}
+  </div>
+</section>
+<section class="yc-seccion" id="videos">
+  <div class="yc-texto"><h2>Vídeos</h2></div>
+  <div class="pagina">
+{codigo_de("1-prepara")}
+  </div>
+</section>"""
+    escribir("saber-mas", documento("saber-mas", cuerpo))
+
+def construir_dolor_y_proposito():
+    p = parrafos_story("4-dos-cosas")
+    contricion = """<div class="yc-texto"><div class="yc-tarjeta yc-oracion">
+  <p class="yc-tarjeta-titulo">Acto de contrición</p>
+  <p>Señor mío Jesucristo, Dios y Hombre verdadero, Creador y Redentor mío; por ser Vos quien sois, Bondad infinita, y porque os amo sobre todas las cosas, me pesa de todo corazón haberos ofendido; también me pesa porque puedo condenarme con las penas del infierno. Ayudado de vuestra divina gracia, propongo firmemente nunca más pecar, confesarme y cumplir la penitencia que me fuera impuesta. Amén.</p>
+</div></div>"""
+    dolor = (f'<div class="yc-texto yc-lectura">' + "".join(f"<p>{x}</p>" for x in p[:3]) +
+             f'<p class="yc-pausa">{p[3]}</p></div>' + contricion + video_html("dolor") +
+             f'<a class="yc-boton" href="/proposito/">Continuar {ICONO_FLECHA}</a>')
+    escribir("dolor", documento("dolor", dolor))
+    proposito = (f'<div class="yc-texto yc-lectura"><p>{p[4]}</p></div>'
+                 '<div class="yc-texto"><div class="yc-tarjeta">'
+                 '<label class="yc-tarjeta-titulo" for="proposito">Escribe un propósito concreto</label>'
+                 '<textarea id="proposito" rows="3" placeholder="Por ejemplo: rezar un momento cada mañana"></textarea>'
+                 '<p class="yc-mini">Opcional. Se guarda solo en este dispositivo y lo verás al terminar.</p></div></div>'
+                 f'<div class="yc-texto yc-lectura"><p class="yc-pausa">{p[5]}</p><p>{p[6]}</p></div>' +
+                 video_html("proposito") +
+                 '<div class="yc-par"><a class="yc-boton-par" href="/5-ayudas/">Ayudas antes de la confesión</a>'
+                 '<a class="yc-boton-par" href="/6-paso-a-paso/">Estoy preparado</a></div>')
+    escribir("proposito", documento("proposito", proposito))
+
+def construir_redirecciones():
+    for viejo, nuevo in REDIRECCIONES.items():
+        destino = ".." + nuevo
+        html = f"""<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8"><title>yomeconfieso</title>
+<link rel="canonical" href="https://www.yomeconfieso.es{nuevo.split('#')[0]}">
+<meta http-equiv="refresh" content="0; url={destino}">
+<meta name="robots" content="noindex">
+<script>location.replace("{destino}");</script></head>
+<body><p><a href="{destino}">Esta página se ha movido. Pulsa aquí.</a></p></body></html>
+"""
+        ruta = os.path.join(RAIZ, viejo, "index.html")
+        os.makedirs(os.path.dirname(ruta), exist_ok=True)
+        open(ruta, "w", encoding="utf-8").write(html)
+        print("redirección", viejo, "->", nuevo)
+
+NORMALES = ["inicio", "2-examen", "2-examen-jovenes", "2-examen-primaria", "3-preguntas", "3-preguntas-jovenes",
+            "3-preguntas-primaria", "5-ayudas", "6-paso-a-paso", "7-final", "contacto"]
+
 if __name__ == "__main__":
-    for s in (sys.argv[1:] or PAGINAS):
+    for s in NORMALES:
         construir(s)
+    construir_saber_mas()
+    construir_dolor_y_proposito()
+    construir_redirecciones()
