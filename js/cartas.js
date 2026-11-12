@@ -108,8 +108,8 @@
 
     var contador = el("span", { class: "cartas-contador" });
     var deshacer = el("button", { type: "button", class: "cartas-deshacer", text: "Deshacer" });
-    var cabecera = el("div", { class: "cartas-cabecera" }, [contador, deshacer]);
-    var pista = el("p", { class: "cartas-pista", html: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg> <span>Hacia arriba: <strong>nada</strong>, se la lleva el viento</span>' });
+
+    var pista = el("p", { class: "cartas-pista", html: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg> <span>Arriba: <strong>nada</strong></span>' });
     var mesa = el("div", { class: "cartas-mesa" });
     var cestasCaja = el("div", { class: "cartas-cestas" });
     var cestasEls = {};
@@ -128,9 +128,9 @@
     var teclado = el("p", { class: "cartas-teclado", text: "Teclado: ← Mucho · ↓ Regular · → Poco · ↑ Nada" });
     var final = el("div", { class: "cartas-final", hidden: "" });
 
-    raiz.appendChild(cabecera);
-    raiz.appendChild(pista);
+    var cabecera = el("div", { class: "cartas-cabecera" }, [contador, pista, deshacer]);
     raiz.appendChild(mesa);
+    raiz.appendChild(cabecera);
     raiz.appendChild(cestasCaja);
     raiz.appendChild(botones);
     raiz.appendChild(teclado);
@@ -149,7 +149,13 @@
       // cartas de fondo (el montón)
       var quedan = palabras.length - indice;
       if (quedan > 2) mesa.appendChild(el("div", { class: "carta carta-fondo fondo-2", "aria-hidden": "true" }));
-      if (quedan > 1) mesa.appendChild(el("div", { class: "carta carta-fondo fondo-1", "aria-hidden": "true" }));
+      if (quedan > 1) {
+        var sig = palabras[indice + 1];
+        mesa.appendChild(el("div", { class: "carta carta-fondo carta-siguiente", "aria-hidden": "true" }, [
+          el("span", { class: "carta-palabra", text: nombreBonito(sig) }),
+          el("span", { class: "carta-desc", text: DESCRIPCIONES[sig] || "" })
+        ]));
+      }
       if (indice >= palabras.length) { terminar(); return; }
       var p = palabras[indice];
       carta = el("div", { class: "carta carta-activa entrando", role: "group", "aria-label": nombreBonito(p) }, [
@@ -204,9 +210,9 @@
         var yCestas = centro(cestasCaja.getBoundingClientRect()).y;
         // cuanto más cerca de las cestas, más pequeña
         var progreso = Math.max(0, Math.min(1, dy / Math.max(1, yCestas - rMesa0.y)));
-        var escala = 1 - 0.6 * progreso;
+        var escala = 1 - 0.9 * progreso;
         var opacidad = dy < 0 ? Math.max(0.25, 1 + dy / 260) : 1;
-        c.style.transform = "translate(" + dx + "px," + dy + "px) rotate(" + (dx * 0.06) + "deg) scale(" + escala + ")";
+        c.style.transform = "translate(" + dx + "px," + dy + "px) rotate(" + Math.max(-40, Math.min(40, dx * 0.18 + dy * 0.04 * (dx < 0 ? -1 : 1))) + "deg) scale(" + escala + ")";
         c.style.opacity = opacidad;
         marcarCesta(cestaBajo(e.clientX, e.clientY));
         pista.classList.toggle("activa", dy < -60);
@@ -245,11 +251,11 @@
       var m = /translate\(([-\d.]+)px,\s*([-\d.]+)px\)/.exec(actual);
       if (m) { dx0 = parseFloat(m[1]); dy0 = parseFloat(m[2]); }
       if (id === "nada") {
-        c.style.transform = "translate(" + dx0 + "px," + (dy0 - window.innerHeight) + "px) rotate(" + (dx0 * 0.1) + "deg) scale(0.8)";
+        c.style.transform = "translate(" + dx0 + "px," + (dy0 - window.innerHeight) + "px) rotate(" + (dx0 * 0.2) + "deg) scale(0.8)";
         c.style.opacity = "0";
       } else {
         var cb = centro(cestasEls[id].caja.getBoundingClientRect());
-        c.style.transform = "translate(" + (dx0 + cb.x - cc.x) + "px," + (dy0 + cb.y - cc.y) + "px) scale(0.08)";
+        c.style.transform = "translate(" + (dx0 + cb.x - cc.x) + "px," + (dy0 + cb.y - cc.y) + "px) rotate(" + (dx0 >= 0 ? 25 : -25) + "deg) scale(0.06)";
         c.style.opacity = "0.2";
       }
       vibrar(id === "nada" ? 8 : 18);

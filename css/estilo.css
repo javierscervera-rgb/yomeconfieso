@@ -567,7 +567,7 @@ body.yc .pagina .chat-body { padding-left: 24px; padding-right: 24px; }
    ===================================================================== */
 .cartas { max-width: 520px; margin: 0 auto; padding: 8px 20px 30px; user-select: none; -webkit-user-select: none; }
 .cartas[hidden] { display: none; }
-.cartas-cabecera { display: flex; align-items: center; justify-content: space-between; }
+.cartas-cabecera { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 2px 0 10px; padding: 0 4px; border-top: 1px solid var(--borde); padding-top: 8px; }
 .cartas-contador { font-weight: 700; color: var(--gris); font-size: 15px; }
 .cartas-deshacer {
   border: none; background: transparent; color: var(--ciruela); font: 600 15px var(--sans);
@@ -579,7 +579,7 @@ body.yc .pagina .chat-body { padding-left: 24px; padding-right: 24px; }
   font-size: 14px; color: #8C84A0; transition: color .2s, transform .2s;
 }
 .cartas-pista.activa { color: var(--tinta); transform: translateY(-3px); }
-.cartas-mesa { position: relative; z-index: 3; height: 330px; margin: 6px 0 4px; touch-action: none; }
+.cartas-mesa { position: relative; z-index: 3; height: 322px; margin: 0 0 4px; touch-action: none; }
 .carta {
   position: absolute;
   top: 14px; left: 0; right: 0;
@@ -592,7 +592,12 @@ body.yc .pagina .chat-body { padding-left: 24px; padding-right: 24px; }
   border: 1px solid #E4DEEC;
 }
 .carta-fondo.fondo-2 { transform: rotate(-5deg); }
-.carta-fondo.fondo-1 { transform: rotate(3deg); }
+.carta-siguiente {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+  padding: 24px; text-align: center;
+  transform: scale(.95) translateY(6px);
+  box-shadow: 0 10px 24px rgba(42,34,56,.08);
+}
 .carta-activa {
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
   padding: 24px;
@@ -603,7 +608,7 @@ body.yc .pagina .chat-body { padding-left: 24px; padding-right: 24px; }
   transition: transform .28s cubic-bezier(.2,.8,.2,1), opacity .28s, border-color .2s;
   will-change: transform;
 }
-.carta-activa.entrando { transform: scale(.9) translateY(14px); opacity: 0; }
+.carta-activa.entrando { transform: scale(.95) translateY(6px); box-shadow: 0 10px 24px rgba(42,34,56,.08); }
 .carta-activa.arrastrando { transition: border-color .2s; cursor: grabbing; }
 .carta-activa.volando { transition: transform .28s ease-in, opacity .28s ease-in; }
 .carta-palabra { font-family: var(--serif); font-weight: 600; font-size: 2.6rem; line-height: 1.02; color: var(--tinta); }
