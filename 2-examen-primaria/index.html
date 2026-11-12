@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../css/estilo.css?v=c5ec80a7">
+<link rel="stylesheet" href="../css/estilo.css?v=b3001486">
 </head>
 <body class="yc">
 <aside class="yc-cuadro">
@@ -187,8 +187,11 @@
 
 
 
+    <button type="button" id="cambiarSistema" class="cambiar-sistema">Cambiar de sistema</button>
+    <div id="cartas" class="cartas" hidden></div>
+
     <!-- Pantalla de inicio -->
-    <div id="startScreen">
+    <div id="startScreen" style="display:none">
         <div class="start-content">
             <p class="start-subtitle">
 Vamos a hacer un juego antes de continuar.<br><br>
@@ -568,5 +571,8 @@ Pulsa el botón de aquí 👇🏻 abajo para comenzar: <br><br>
   </main>
   <footer class="yc-pie">Esta web te ayuda a prepararte. El perdón lo da el sacerdote en la confesión. · <a href="../0-dudas/">Dudas</a> · <a href="../contacto/">Contacto</a></footer>
 </div>
+<script>window.PALABRAS_EXAMEN = ["NO REZO", "BLASFEMIA", "SIN MISA", "DESOBEDIENCIA", "NO RESPETAR", "HABLAR MAL", "PELEAS", "BURLAS", "ENFADOS", "NO PERDONO", "RENCOROSO/A", "ORGULLOSO/A", "QUEJAS", "IMPUREZA", "PEREZA", "EGOÍSTA", "ME LO QUEDO", "CAPRICHOSO", "MENTIROSO", "ENVIDIOSO", "CABEZOTA"];
+window.DESTINO_PREGUNTAS = "../3-preguntas-primaria/";</script>
+<script src="../js/cartas.js?v=9a23ad07"></script>
 </body>
 </html>
