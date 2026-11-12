@@ -44,7 +44,7 @@ body.yc :focus-visible { outline: 3px solid var(--ciruela); outline-offset: 2px;
 .yc-camino { display: none; }
 
 /* ===== Menú ===== */
-.yc-cuerpo { position: relative; }
+.yc-cuerpo { position: relative; display: flow-root; }
 .yc-barra {
   position: absolute;
   z-index: 5;
@@ -854,7 +854,7 @@ body.yc .pagina .parroquias-nota { margin: 4px 0 0; font-size: .82rem; color: va
 .yc-mi-proposito #mi-proposito { font-family: var(--serif); font-size: 1.3rem; line-height: 1.4; }
 
 .yc-video {
-  max-width: calc(var(--ancho-texto) - 48px); margin: 22px auto 0; box-sizing: border-box;
+  width: calc(100% - 48px); max-width: calc(var(--ancho-texto) - 48px); margin: 22px auto 0; box-sizing: border-box;
   background: #fff; border: 1px solid #E4DEEC; border-radius: 16px; overflow: hidden;
 }
 .yc-video summary {
