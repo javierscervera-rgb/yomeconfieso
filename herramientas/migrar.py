@@ -125,12 +125,12 @@ TITULOS = {  # título, subtítulo
     "contacto": ("¿Quieres decirme algo?", ""),
 }
 
-VIDEOS = {  # homilías de la Novena (antes en «Prepara»)
-    "examen": ("El examen de conciencia", "8kwMIOBhx_Q"),
-    "dolor": ("El dolor de los pecados", "HL07-Zv__eM"),
-    "proposito": ("El propósito de la enmienda", "MfxZ74nGVFA"),
-    "decir": ("Decir los pecados al confesor", "6f6s4foZRpU"),
-    "penitencia": ("Cumplir la penitencia", "qKgrMTU_SRI"),
+VIDEOS = {  # explicaciones breves (lista «YOMECONFIESO: La confesión paso a paso»)
+    "examen": ("El examen de conciencia", "iy600PwVhNU"),
+    "dolor": ("El dolor de los pecados", "QtboE1KXdEU"),
+    "proposito": ("El propósito de la enmienda", "_gNeeQXcg-Q"),
+    "decir": ("Decir los pecados al confesor", "kIClPrOVQeI"),
+    "penitencia": ("Cumplir la penitencia", "0_k8zUC86ck"),
 }
 VIDEO_DE = {"2-examen": "examen", "2-examen-jovenes": "examen", "2-examen-primaria": "examen",
             "dolor": "dolor", "proposito": "proposito", "6-paso-a-paso": "decir", "7-final": "penitencia"}
@@ -138,7 +138,7 @@ VIDEO_DE = {"2-examen": "examen", "2-examen-jovenes": "examen", "2-examen-primar
 def video_html(clave):
     titulo, yt = VIDEOS[clave]
     return (f'<details class="yc-video"><summary><span class="yc-video-icono" aria-hidden="true">▶</span>'
-            f'<span><small>Para profundizar</small>Homilía: «{titulo}»</span></summary>'
+            f'<span><small>Para profundizar</small>Explicación: «{titulo}»</span></summary>'
             f'<div class="yc-video-marco"><iframe data-src="https://www.youtube.com/embed/{yt}" title="{titulo}" '
             f'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div></details>')
 
@@ -390,6 +390,12 @@ def escribir(slug, html):
                              ("ctx.fillStyle   = '#ecf0f1'", "ctx.fillStyle   = '#ECE8F3'"),
                              ("ctx.fillStyle    = '#2c3e50'", "ctx.fillStyle    = '#2A2238'")]:
             html = html.replace(viejo, nuevo)
+    # vídeos nuevos (mejor editados) en lugar de las homilías completas
+    for viejo, nuevo in [("dOVuHuXlZhY", "kQnzisJ5YFg"), ("8kwMIOBhx_Q", "iy600PwVhNU"), ("HL07-Zv__eM", "QtboE1KXdEU"),
+                         ("MfxZ74nGVFA", "_gNeeQXcg-Q"), ("6f6s4foZRpU", "kIClPrOVQeI"), ("qKgrMTU_SRI", "0_k8zUC86ck")]:
+        html = html.replace(viejo, nuevo)
+    html = html.replace("Si quieres saber más aquí te dejo 6 vídeos sobre los aspectos esenciales de la Confesión. Son homilías pronunciadas en el contexto de una Novena a la Virgen del Pilar.",
+                        "Si quieres saber más, aquí tienes seis vídeos breves que explican los aspectos esenciales de la Confesión.")
     html = html.replace("/4-dos-cosas/", "/dolor/").replace("/4-dos-cosas", "/dolor/")
     for mal, bien in [("te confesaros", "te confesaste"), ("cercansa", "cercanas"), ("pero pero", "pero"), ("momento en vayas", "momento en que vayas")]:
         html = html.replace(mal, bien)
