@@ -400,7 +400,12 @@
         iniciarCartas(cartas);
       } else {
         cartas.hidden = true;
-        if (!juegoEmpezado) inicio.style.display = "flex";
+        // directamente al juego, sin la pantalla de instrucciones
+        if (!juegoEmpezado) {
+          inicio.style.display = "none";
+          var b = document.getElementById("startBtn");
+          if (b) b.click();
+        }
       }
     }
     empezar.addEventListener("click", function () {

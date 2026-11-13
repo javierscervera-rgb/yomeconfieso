@@ -31,7 +31,7 @@ PAGINAS = {
 
 # páginas antiguas que ahora redirigen
 REDIRECCIONES = {"0-intro": "/saber-mas/#que-es", "0-dudas": "/saber-mas/#dudas",
-                 "1-prepara": "/saber-mas/#videos", "4-dos-cosas": "/dolor/"}
+                 "1-prepara": "/saber-mas/#videos", "4-dos-cosas": "/dolor/", "5-ayudas": "/6-paso-a-paso/"}
 
 # ---------- CSS: prefijar todos los selectores con .pagina ----------
 def prefijar_css(css):
@@ -104,7 +104,7 @@ PARTES = [  # (número, nombre, [(slug base, subpaso)])
     (1, "Examen de conciencia", [("comenzar", "Elige tu examen"), ("2-examen", "Examen"), ("3-preguntas", "Preguntas")]),
     (2, "Dolor de los pecados", [("dolor", None)]),
     (3, "Propósito de la enmienda", [("proposito", None)]),
-    (4, "Decir los pecados al confesor", [("5-ayudas", "Antes de entrar"), ("6-paso-a-paso", "Paso a paso")]),
+    (4, "Decir los pecados al confesor", [("6-paso-a-paso", None)]),
     (5, "Cumplir la penitencia", [("7-final", None)]),
 ]
 
@@ -189,6 +189,11 @@ def menu_html(slug):
         f'<a href="{h}"' + (' aria-current="page"' if h == activo else '') + f'>{n}</a>'
         for n, h in MENU_ENLACES)
 
+def menu_desplegable(slug, clase=""):
+    return (f'<details class="yc-menu-movil {clase}">'
+            '<summary aria-label="Abrir menú"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></summary>'
+            f'<nav aria-label="Menú">{menu_html(slug)}<hr>{camino_html(slug)}</nav></details>')
+
 def cabecera_pagina(slug):
     n, nombre, i, sub = parte_de(slug)
     if n is not None:
@@ -264,12 +269,11 @@ def documento(slug, cuerpo, portada=False):
 
 PORTADA = """<div class="yc-portada">
   <div class="yc-portada-cuadro">
-    <nav class="yc-menu yc-menu-claro" aria-label="Menú"><a href="/saber-mas/">Saber más</a><a href="/saber-mas/#dudas">Dudas</a><a href="/contacto/">Contacto</a></nav>
+MENU_PORTADA
     <h1><img src="/img/logo.png" alt="Yo me confieso"></h1>
     <p class="yc-cita">«Es un encuentro vivo de amor y sanación que manifiesta de manera palpable la ternura infinita del Corazón de Jesús.»</p>
   </div>
   <main class="yc-portada-texto">
-    <nav class="yc-menu yc-menu-portada" aria-label="Menú"><a href="/saber-mas/">Saber más</a><a href="/saber-mas/#dudas">Dudas</a><a href="/contacto/">Contacto</a></nav>
     <p class="yc-antetitulo">Examen de conciencia y confesión</p>
     <p class="yc-lema">Tu guía paso a paso para el examen de conciencia y la confesión</p>
     <p class="yc-entradilla">Sin prisas, a tu ritmo. Un examen sencillo, unas preguntas para ti y el diálogo con el sacerdote en la palma de la mano.</p>
@@ -364,7 +368,7 @@ def construir(slug):
     partes = []
     if slug == "inicio":
         codigo = ""  # la portada nueva no usa los fragmentos antiguos
-        partes.append(PORTADA)
+        partes.append(PORTADA.replace("MENU_PORTADA", menu_desplegable("inicio", "yc-menu-portada-btn")))
     for t in textos_antes:
         clase = "yc-texto yc-aviso" if "NO SUSTITUYE" in t else "yc-texto"
         partes.append(f'<div class="{clase}">{urls(t)}</div>')
@@ -413,6 +417,11 @@ def codigo_de(slug):
             return urls(arreglos(slug, limpiar_codigo(contenido)))
     return ""
 
+def SIN_EXAMENES(codigo):
+    codigo, n = re.subn(r"\s*<!-- BOTONES DE EXAMEN -->.*?(?=<script>)", "\n", codigo, count=1, flags=re.S)
+    assert n == 1, "no se encontró la elección de examen en Prepara"
+    return codigo
+
 def construir_saber_mas():
     intro = parrafos_story("0-intro")
     intro_html = "".join(f"<p>{p}</p>" for p in intro if "Recibid el Espíritu Santo" not in p)
@@ -448,9 +457,10 @@ def construir_saber_mas():
 <section class="yc-seccion" id="videos">
   <div class="yc-texto"><h2>Vídeos</h2></div>
   <div class="pagina">
-{codigo_de("1-prepara")}
+{SIN_EXAMENES(codigo_de("1-prepara"))}
   </div>
-</section>"""
+</section>
+<a class="yc-boton" href="/comenzar/">Comenzamos {ICONO_FLECHA}</a>"""
     escribir("saber-mas", documento("saber-mas", cuerpo))
 
 def construir_dolor_y_proposito():
@@ -463,15 +473,15 @@ def construir_dolor_y_proposito():
              f'<p class="yc-pausa">{p[3]}</p></div>' + contricion + video_html("dolor") +
              f'<a class="yc-boton" href="/proposito/">Continuar {ICONO_FLECHA}</a>')
     escribir("dolor", documento("dolor", dolor))
-    proposito = (f'<div class="yc-texto yc-lectura"><p>{p[4]}</p></div>'
+    proposito = ('<div class="yc-texto yc-lectura">'
+                 '<p>Ahora que estás arrepentido pregúntate qué vas a hacer para que no vuelva a pasar, qué momentos, circunstancias, personas, rutinas debes evitar para que no suceda. Dios nos perdona siempre pero nos pide que, cada vez, tengamos un propósito firme y concreto de no volver a hacer ese pecado.</p>'
+                 '<p class="yc-pausa">Quizá tendrías que hacer algo concreto para evitarlo…</p></div>'
                  '<div class="yc-texto"><div class="yc-tarjeta">'
-                 '<label class="yc-tarjeta-titulo" for="proposito">Escribe un propósito concreto</label>'
-                 '<textarea id="proposito" rows="3" placeholder="Por ejemplo: rezar un momento cada mañana"></textarea>'
-                 '<p class="yc-mini">Opcional. Se guarda solo en este dispositivo y lo verás al terminar.</p></div></div>'
-                 f'<div class="yc-texto yc-lectura"><p class="yc-pausa">{p[5]}</p><p>{p[6]}</p></div>' +
+                 '<label class="yc-tarjeta-titulo" for="proposito">Si quieres escribe aquí alguna cosa que vas a cambiar.</label>'
+                 '<textarea id="proposito" rows="3"></textarea>'
+                 '<p class="yc-mini">Se guarda solo en este dispositivo y lo verás al terminar.</p></div></div>' +
                  video_html("proposito") +
-                 '<div class="yc-par"><a class="yc-boton-par" href="/5-ayudas/">Ayudas antes de la confesión</a>'
-                 '<a class="yc-boton-par" href="/6-paso-a-paso/">Estoy preparado</a></div>')
+                 f'<a class="yc-boton" href="/6-paso-a-paso/">Continuar {ICONO_FLECHA}</a>')
     escribir("proposito", documento("proposito", proposito))
 
 def construir_comenzar():
@@ -505,7 +515,7 @@ def construir_redirecciones():
         print("redirección", viejo, "->", nuevo)
 
 NORMALES = ["inicio", "2-examen", "2-examen-jovenes", "2-examen-primaria", "3-preguntas", "3-preguntas-jovenes",
-            "3-preguntas-primaria", "5-ayudas", "6-paso-a-paso", "7-final", "contacto"]
+            "3-preguntas-primaria", "6-paso-a-paso", "7-final", "contacto"]
 
 if __name__ == "__main__":
     for s in NORMALES:

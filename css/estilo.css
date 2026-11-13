@@ -428,9 +428,12 @@ body.yc .pagina .copy-btn { background: #fff; color: var(--tinta); border: 1px s
 body.yc .pagina .btn:hover,
 body.yc .pagina .final-btn:hover,
 body.yc .pagina .copy-btn:hover { background: var(--lavanda); color: var(--tinta); }
-body.yc .pagina .contacto-final { text-align: left; padding: 0 24px; margin: 30px 0 40px; }
+body.yc .pagina .contacto-final { text-align: center; padding: 0 24px; margin: 26px 0 0; font-family: var(--serif); font-size: 1.5rem; font-weight: 600; color: var(--tinta); }
+body.yc .pagina .contacto-boton .yc-boton { margin: 12px auto 30px; }
 body.yc .pagina .contacto-final a { color: var(--ciruela); }
-body.yc .pagina .share-buttons { justify-content: flex-start; padding: 0 24px; }
+body.yc .pagina .share-buttons { justify-content: center; padding: 0 24px; margin: 6px auto 24px; }
+body.yc .pagina .story { padding-bottom: 0; }
+body.yc .pagina .story p.dedos { margin: 10px auto 6px; font-size: 2.2rem; }
 
 /* Prepara y Dudas: acordeones */
 body.yc .pagina .item-title,
@@ -574,8 +577,8 @@ body.yc .pagina .accordion-item label:hover { background: var(--lavanda); }
 body.yc .pagina .accordion-item input:checked + label { border-radius: 14px 14px 0 0; background: var(--lavanda); }
 body.yc .pagina .content { background: #fff; border-radius: 0 0 14px 14px; font-size: 1.08rem; }
 body.yc .pagina .content strong { font-family: var(--serif); font-size: 1.5rem; }
-body.yc .pagina .parroquia-item button { background: var(--tinta); border-radius: 20px; padding: 8px 16px; }
-body.yc .pagina .parroquia-item button:hover { background: var(--ciruela); }
+body.yc .parroquia-item button { background: var(--tinta); border-radius: 20px; padding: 8px 16px; }
+body.yc .parroquia-item button:hover { background: var(--ciruela); }
 
 /* Paso a paso */
 body.yc .pagina .left-bubble { background: var(--ciruela); color: #fff; }
@@ -728,17 +731,17 @@ body.eleccion-abierta { overflow: hidden; }
 @media (max-width: 360px) { .eleccion-opciones { grid-template-columns: 1fr; } }
 
 /* Parroquias cercanas */
-body.yc .pagina .parroquia-item { display: flex; flex-direction: column; gap: 6px; border: 1px solid #E4DEEC; box-shadow: none; }
-body.yc .pagina .parroquia-item .nombre { font-size: 1rem; font-weight: 700; color: var(--tinta); }
-body.yc .pagina .parroquia-item .distancia { font-size: .9rem; font-weight: 600; color: var(--ciruela); white-space: nowrap; margin-left: 10px; }
-body.yc .pagina .parroquia-dir { font-size: .9rem; color: var(--gris); line-height: 1.35; }
-body.yc .pagina .parroquia-ruta {
+body.yc .parroquia-item { display: flex; flex-direction: column; gap: 6px; border: 1px solid #E4DEEC; box-shadow: none; }
+body.yc .parroquia-item .nombre { font-size: 1rem; font-weight: 700; color: var(--tinta); }
+body.yc .parroquia-item .distancia { font-size: .9rem; font-weight: 600; color: var(--ciruela); white-space: nowrap; margin-left: 10px; }
+body.yc .parroquia-dir { font-size: .9rem; color: var(--gris); line-height: 1.35; }
+body.yc .parroquia-ruta {
   align-self: flex-start; margin-top: 4px; padding: 8px 16px; border-radius: 20px;
   background: #fff; border: 1px solid #CFC7DD; color: var(--tinta); text-decoration: none; font-weight: 600; font-size: .95rem;
 }
-body.yc .pagina .parroquia-ruta:hover { background: var(--lavanda); }
-body.yc .pagina .parroquias-mensaje { margin: 6px 0; color: var(--gris); }
-body.yc .pagina .parroquias-nota { margin: 4px 0 0; font-size: .82rem; color: var(--gris); }
+body.yc .parroquia-ruta:hover { background: var(--lavanda); }
+body.yc .parroquias-mensaje { margin: 6px 0; color: var(--gris); }
+body.yc .parroquias-nota { margin: 4px 0 0; font-size: .82rem; color: var(--gris); }
 
 /* =====================================================================
    Las cinco partes: indicador de progreso y camino
@@ -979,3 +982,31 @@ body.yc .juego-modal .cartas { padding-top: 4px; }
   }
   body.yc .juego-modal .scroll-container { height: calc(94vh - 160px); }
 }
+
+/* Parroquias: piezas base (antes venían de la página de Ayudas) */
+.parroquias { display: flex; flex-direction: column; gap: 10px; padding: 12px 0 4px; }
+body.yc .parroquia-item { background: #fff; border-radius: 14px; padding: 14px; }
+body.yc .parroquia-header { display: flex; justify-content: space-between; align-items: flex-start; }
+
+/* Desplegable (Buscar iglesias cercanas) */
+.yc-acciones { margin-top: 10px; }
+.yc-desplegable { margin: 10px 0 0; border-radius: 16px; background: transparent; }
+.yc-desplegable summary {
+  list-style: none; display: inline-flex; align-items: center; gap: 10px; cursor: pointer;
+  min-height: 48px; padding: 0 20px; border-radius: 24px; border: 1px solid #CFC7DD; background: #fff;
+  font-weight: 700; color: var(--tinta);
+}
+.yc-desplegable summary::-webkit-details-marker { display: none; }
+.yc-desplegable summary:hover, .yc-desplegable[open] summary { background: var(--lavanda); }
+
+/* Menú en la portada */
+.yc-portada .yc-menu-portada-btn { position: absolute; top: 12px; right: 12px; z-index: 10; display: block; }
+.yc-portada .yc-menu-portada-btn summary { background: rgba(42,34,56,.55); }
+@media (min-width: 1000px) {
+  .yc-portada .yc-menu-portada-btn { display: block; position: fixed; top: 20px; right: 24px; }
+  .yc-portada .yc-menu-portada-btn summary { background: var(--tinta); }
+}
+
+/* Juego: margen lateral del cuadro blanco dentro de la ventana */
+body.yc .juego-modal .juego { padding: 0 16px; box-sizing: border-box; }
+body.yc .juego-modal .velocidad { right: 24px; }
