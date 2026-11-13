@@ -20,6 +20,7 @@ PAGINAS = {
     "3-preguntas": ("Preguntas del examen · yomeconfieso", "Preguntas del examen de conciencia.", False),
     "3-preguntas-jovenes": ("Preguntas del examen · yomeconfieso", "Preguntas del examen de conciencia para jóvenes.", False),
     "3-preguntas-primaria": ("Preguntas del examen · yomeconfieso", "Preguntas del examen de conciencia para chicos y chicas.", False),
+    "comenzar": ("Comenzamos: examen de conciencia · yomeconfieso", "Primera parte de la confesión: el examen de conciencia. Elige tu examen.", False),
     "dolor": ("Dolor de los pecados · yomeconfieso", "Segunda parte de la confesión: el dolor de los pecados.", False),
     "proposito": ("Propósito de la enmienda · yomeconfieso", "Tercera parte de la confesión: el propósito de la enmienda.", False),
     "5-ayudas": ("Ayudas antes de confesarte · yomeconfieso", "Oraciones, vídeo y parroquias cercanas.", False),
@@ -100,7 +101,7 @@ def trocear(slug):
     return res
 
 PARTES = [  # (número, nombre, [(slug base, subpaso)])
-    (1, "Examen de conciencia", [("2-examen", "Examen"), ("3-preguntas", "Preguntas")]),
+    (1, "Examen de conciencia", [("comenzar", "Elige tu examen"), ("2-examen", "Examen"), ("3-preguntas", "Preguntas")]),
     (2, "Dolor de los pecados", [("dolor", None)]),
     (3, "Propósito de la enmienda", [("proposito", None)]),
     (4, "Decir los pecados al confesor", [("5-ayudas", "Antes de entrar"), ("6-paso-a-paso", "Paso a paso")]),
@@ -109,6 +110,7 @@ PARTES = [  # (número, nombre, [(slug base, subpaso)])
 
 TITULOS = {  # título, subtítulo
     "saber-mas": ("Saber más", "Qué es la confesión, sus cinco partes, vídeos y dudas"),
+    "comenzar": ("Examen de conciencia", ""),
     "2-examen": ("Examen de conciencia", "Para adultos"),
     "2-examen-jovenes": ("Examen de conciencia", "Para jóvenes"),
     "2-examen-primaria": ("Examen de conciencia", "Para chicos y chicas"),
@@ -211,7 +213,7 @@ def documento(slug, cuerpo, portada=False):
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>{titulo}</title>
 <meta name="description" content="{desc}">
 <link rel="canonical" href="{canon}">
@@ -271,22 +273,9 @@ PORTADA = """<div class="yc-portada">
     <p class="yc-antetitulo">Examen de conciencia y confesión</p>
     <p class="yc-lema">Tu guía paso a paso para el examen de conciencia y la confesión</p>
     <p class="yc-entradilla">Sin prisas, a tu ritmo. Un examen sencillo, unas preguntas para ti y el diálogo con el sacerdote en la palma de la mano.</p>
-    <p class="yc-antetitulo yc-elige">Elige tu examen</p>
-    <div class="yc-examenes">
-      <a class="yc-examen" href="/2-examen/"><span><strong>Adultos</strong><small>Más de 30 años</small></span>FLECHA</a>
-      <a class="yc-examen" href="/2-examen-jovenes/"><span><strong>Jóvenes</strong><small>De 15 a 30 años</small></span>FLECHA</a>
-      <a class="yc-examen" href="/2-examen-primaria/"><span><strong>Chicos y chicas</strong><small>De 10 a 15 años</small></span>FLECHA</a>
-    </div>
-    <a class="yc-enlace" href="/saber-mas/">Saber más sobre la confesión</a>
-    <div class="yc-cinco">
-      <p class="yc-antetitulo">El camino, en cinco partes</p>
-      <ol>
-        <li><span>1</span>Examen de conciencia</li>
-        <li><span>2</span>Dolor de los pecados</li>
-        <li><span>3</span>Propósito de la enmienda</li>
-        <li><span>4</span>Decir los pecados al confesor</li>
-        <li><span>5</span>Cumplir la penitencia</li>
-      </ol>
+    <div class="yc-portada-botones">
+      <a class="yc-boton-par" href="/comenzar/">Comenzamos</a>
+      <a class="yc-boton-par" href="/saber-mas/">Saber más</a>
     </div>
     <p class="yc-nota">Esta web te ayuda a prepararte. El perdón lo da el sacerdote en la confesión.</p>
   </main>
@@ -485,6 +474,20 @@ def construir_dolor_y_proposito():
                  '<a class="yc-boton-par" href="/6-paso-a-paso/">Estoy preparado</a></div>')
     escribir("proposito", documento("proposito", proposito))
 
+def construir_comenzar():
+    examenes = "".join(
+        f'<a class="yc-examen" href="/{slug}/"><span><strong>{t}</strong><small>{sub}</small></span>{ICONO_FLECHA}</a>'
+        for slug, t, sub in [("2-examen", "Adultos", "Más de 30 años"),
+                             ("2-examen-jovenes", "Jóvenes", "De 15 a 30 años"),
+                             ("2-examen-primaria", "Chicos y chicas", "De 10 a 15 años")])
+    cuerpo = f"""<div class="yc-texto yc-lectura">
+  <p>Empezamos por la primera de las cinco partes de la confesión: el <strong>examen de conciencia</strong>.</p>
+  <p>Examinar la conciencia es mirar con calma tu vida a la luz del amor de Dios para reconocer en qué le has fallado a Él, a los demás y a ti mismo desde tu última confesión. No se trata de agobiarte, sino de ver con sinceridad lo que hay en tu corazón para poder ponerlo en manos de Dios.</p>
+  <p>Te ayudaremos en dos momentos: primero, un juego sencillo para ordenar unas palabras; después, unas preguntas preparadas según lo que hayas elegido.</p>
+</div>
+<div class="yc-texto"><p class="yc-antetitulo yc-izq">Elige tu examen</p><div class="yc-examenes yc-examenes-lista">{examenes}</div></div>"""
+    escribir("comenzar", documento("comenzar", cuerpo))
+
 def construir_redirecciones():
     for viejo, nuevo in REDIRECCIONES.items():
         destino = ".." + nuevo
@@ -508,5 +511,6 @@ if __name__ == "__main__":
     for s in NORMALES:
         construir(s)
     construir_saber_mas()
+    construir_comenzar()
     construir_dolor_y_proposito()
     construir_redirecciones()

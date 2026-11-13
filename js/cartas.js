@@ -293,16 +293,8 @@
     function terminar() {
       carta = null;
       localStorage.setItem("resultados", JSON.stringify(resultados.map(function (r) { return { word: r.word, value: r.value }; })));
-      mesa.hidden = true; botones.hidden = true; pista.hidden = true;
-      contador.textContent = palabras.length + " / " + palabras.length;
-      deshacer.disabled = false;
-      final.innerHTML = "";
-      final.appendChild(el("p", { class: "cartas-hecho", text: "¡Hecho! Ya has colocado todas las palabras." }));
-      var ir = el("a", { class: "yc-boton", href: destino, text: "Iniciar chat" });
-      final.appendChild(ir);
-      final.hidden = false;
       vibrar([20, 40, 20]);
-      setTimeout(function () { ir.scrollIntoView({ behavior: "smooth", block: "center" }); }, 50);
+      setTimeout(function () { if (window.finExamen) window.finExamen(); }, 350);
     }
 
     window.addEventListener("keydown", function (e) {
@@ -312,7 +304,6 @@
     });
 
     nuevaCarta();
-    raiz.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
   /* =================== VENTANA PARA ELEGIR SISTEMA =================== */
@@ -360,24 +351,69 @@
     caja.focus();
   }
 
+  /* =================== VENTANA DEL JUEGO =================== */
+  function abrirModal() {
+    var m = document.getElementById("juegoModal");
+    if (!m) return;
+    m.hidden = false;
+    m.classList.remove("saliendo");
+    document.body.classList.add("juego-abierto");
+    var c = m.querySelector(".juego-modal-cuerpo");
+    if (c) c.scrollTop = 0;
+  }
+  function cerrarModal(fundido, despues) {
+    var m = document.getElementById("juegoModal");
+    if (!m) return;
+    function fin() {
+      m.hidden = true;
+      m.classList.remove("saliendo");
+      document.body.classList.remove("juego-abierto");
+      if (despues) despues();
+    }
+    if (fundido) { m.classList.add("saliendo"); setTimeout(fin, 650); } else fin();
+  }
+  window.finExamen = function () {
+    cerrarModal(true, function () {
+      var intro = document.getElementById("examenIntro");
+      var fin = document.getElementById("finExamen");
+      if (intro) intro.hidden = true;
+      if (fin) {
+        fin.hidden = false;
+        fin.classList.add("apareciendo");
+        setTimeout(function () { fin.scrollIntoView({ behavior: "smooth", block: "center" }); }, 50);
+      }
+    });
+  };
+
   function preparar() {
     var inicio = document.getElementById("startScreen");
     var cartas = document.getElementById("cartas");
-    var cambiar = document.getElementById("cambiarSistema");
-    if (!inicio || !cartas) return;
+    var empezar = document.getElementById("empezarExamen");
+    var cerrar = document.getElementById("cerrarJuego");
+    var repetir = document.getElementById("repetirExamen");
+    if (!inicio || !cartas || !empezar) return;
+    var juegoEmpezado = false;
     function elegir(sistema) {
+      abrirModal();
       if (sistema === "cartas") {
         inicio.style.display = "none";
         iniciarCartas(cartas);
       } else {
         cartas.hidden = true;
-        inicio.style.display = "flex";
+        if (!juegoEmpezado) inicio.style.display = "flex";
       }
     }
-    if (cambiar) cambiar.addEventListener("click", function () { abrirEleccion(elegir); });
-    var empezar = document.getElementById("startBtn");
-    if (empezar && cambiar) empezar.addEventListener("click", function () { cambiar.hidden = true; });
-    abrirEleccion(elegir);
+    empezar.addEventListener("click", function () {
+      if (juegoEmpezado) { abrirModal(); return; }
+      abrirEleccion(elegir);
+    });
+    var btnJuego = document.getElementById("startBtn");
+    if (btnJuego) btnJuego.addEventListener("click", function () { juegoEmpezado = true; });
+    if (cerrar) cerrar.addEventListener("click", function () {
+      cerrarModal(false);
+      empezar.textContent = juegoEmpezado || !cartas.hidden ? "Continuar" : "Comenzar";
+    });
+    if (repetir) repetir.addEventListener("click", function () { location.reload(); });
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", preparar);
