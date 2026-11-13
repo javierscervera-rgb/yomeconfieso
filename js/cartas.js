@@ -374,9 +374,10 @@
   }
   window.finExamen = function () {
     cerrarModal(true, function () {
-      var intro = document.getElementById("examenIntro");
+      // El texto de presentación se queda; solo se oculta el botón «Comenzar»
+      var empezar = document.getElementById("empezarExamen");
       var fin = document.getElementById("finExamen");
-      if (intro) intro.hidden = true;
+      if (empezar) empezar.hidden = true;
       if (fin) {
         fin.hidden = false;
         fin.classList.add("apareciendo");

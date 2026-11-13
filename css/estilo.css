@@ -1010,3 +1010,4 @@ body.yc .parroquia-header { display: flex; justify-content: space-between; align
 /* Juego: margen lateral del cuadro blanco dentro de la ventana */
 body.yc .juego-modal .juego { padding: 0 16px; box-sizing: border-box; }
 body.yc .juego-modal .velocidad { right: 24px; }
+.yc-boton[hidden] { display: none; }
