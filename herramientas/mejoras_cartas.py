@@ -63,6 +63,8 @@ for slug, (publico, parrafos) in TEXTOS.items():
                   f"<script>window.PALABRAS_EXAMEN = {json.dumps(palabras, ensure_ascii=False)};\n"
                   f"window.DESTINO_PREGUNTAS = {json.dumps(destino)};</script>\n"
                   f'<script src="../js/cartas.js?v={VERSION_JS}"></script>\n</body>', 1)
+    s = s.replace("Pulsa en el botón de “INICIAR CHAT”  cuando hayas terminado.<br><br>",
+                  "Cuando hayan caído todas, la ventana se cerrará sola y pasarás a las preguntas.<br><br>", 1)
     assert 'id="cartas"' in s and "finExamen" in s and 'style="display:none"' in s
     open(ruta, "w", encoding="utf-8").write(s)
     print("ok", slug, len(palabras), destino)
